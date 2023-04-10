@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 
 from .models import User,Post
 
@@ -34,11 +34,11 @@ class ProfileView(View):
             # Follow a user
             if request.POST["follow"] == "follow":
                 request.user.follow(user)
-                return HttpResponseRedirect(reverse("profile", args=[username]))
+                return HttpResponseRedirect(reverse_lazy("profile", args=[username]))
             # Unfollow a user
             elif request.POST["follow"] == "unfollow":
                 request.user.unfollow(user)
-                return HttpResponseRedirect(reverse("profile", args=[username]))
+                return HttpResponseRedirect(reverse_lazy("profile", args=[username]))
         except User.DoesNotExist:
             # Handle user not found error
             return render(request, "network/error.html", {
@@ -117,6 +117,14 @@ def all_posts(request):
     # Get all posts
     posts = Post.objects.order_by("timestamp").all()
     return render(request, "network/all_posts.html", {
+        "posts": posts
+    })
+    
+@login_required
+def following_posts(request):
+    # Get all posts from users that the current user is following
+    posts = Post.objects.filter(user__in=request.user.following.all()).order_by("timestamp").all()
+    return render(request, "network/following_posts.html", {
         "posts": posts
     })
     
