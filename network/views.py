@@ -61,20 +61,18 @@ def login_view(request):
     if request.method == "POST":
 
         # Attempt to sign user in
-        username = request.POST["username"]
+        email = request.POST["email"]
         password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=email, password=password)
 
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return JsonResponse({'success': True, 'redirect': reverse("index")})
         else:
-            return render(request, "network/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            return JsonResponse({'success': False, 'message': 'Invalid email and/or password.'})
     else:
-        return render(request, "network/login.html")
+        return render(request, "mail/login.html")
 
 
 def logout_view(request):
@@ -84,29 +82,27 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
-        username = request.POST["username"]
         email = request.POST["email"]
 
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "network/register.html", {
-                "message": "Passwords must match."
-            })
+            return JsonResponse({'success': False, 'message': 'Passwords must match.'})
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
+            user = User.objects.create_user(email, email, password)
             user.save()
-        except IntegrityError:
-            return render(request, "network/register.html", {
-                "message": "Username already taken."
-            })
+        except IntegrityError as e:
+            print(e)
+            return JsonResponse({'success': False, 'message': 'Email address already taken.'})
+
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return JsonResponse({'success': True, 'redirect': reverse("index")})
+
     else:
-        return render(request, "network/register.html")
+        return render(request, "mail/login.html")
     
 @login_required
 def new_post(request):
