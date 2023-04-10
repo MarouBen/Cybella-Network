@@ -3,7 +3,8 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    """ User model. also contain the profile picture. """
+    picture = models.ImageField(upload_to="network/images/profile_pictures", blank=True, null=True)
 
 
 class post(models.Model):
