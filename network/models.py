@@ -50,7 +50,7 @@ class User(AbstractUser):
 
 
 
-class post(models.Model):
+class Post(models.Model):
     """ Post model. Each post has a user, content, timestamp, and likes. """
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
