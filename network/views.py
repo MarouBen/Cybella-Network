@@ -17,6 +17,10 @@ class ProfileView(View):
             user = User.objects.get(username=username)
             posts = Post.objects.filter(user=user).order_by("timestamp").all()
             picture = user.picture.url
+            # Paginate posts with 10 posts per page
+            paginator = Paginator(posts, 10)
+            page = request.GET.get('page')
+            posts = paginator.get_page(page)
             return render(request, "network/profile.html", {
                 "user": user,
                 "posts": posts,
@@ -117,6 +121,10 @@ def new_post(request):
 def all_posts(request):
     # Get all posts
     posts = Post.objects.order_by("timestamp").all()
+    # Paginate posts with 10 posts per page
+    paginator = Paginator(all_posts, 10)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
     return render(request, "network/all_posts.html", {
         "posts": posts
     })
@@ -125,6 +133,11 @@ def all_posts(request):
 def following_posts(request):
     # Get all posts from users that the current user is following
     posts = Post.objects.filter(user__in=request.user.following.all()).order_by("timestamp").all()
+    # Paginate posts with 10 posts per page
+    paginator = Paginator(following_posts, 10)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
+
     return render(request, "network/following_posts.html", {
         "posts": posts
     })
