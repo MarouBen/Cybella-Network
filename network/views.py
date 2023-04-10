@@ -1,12 +1,13 @@
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.urls import reverse,reverse_lazy
 
 from .models import User,Post
@@ -142,39 +143,31 @@ def following_posts(request):
     
 @login_required
 def edit_post(request, post_id):
-    try:
-        # Get the post
-        post = Post.objects.get(id=post_id)
+    # Get the post
+    post = get_object_or_404(Post, id=post_id)
+    
+    # Check if the user is authorized to edit the post
+    if post.user != request.user:
+        raise PermissionDenied("You are not authorized to edit this post.")
+    
+    # If the user is submitting an edit
+    if request.method == "POST":
+        data = json.loads(request.body)
+        content = data.get("content", "")
+        post.content = content
+        post.save()
+        return JsonResponse({"message": "Post edited successfully."}, status=201)
         
-        # Check if the user is authorized to edit the post
-        if post.user != request.user:
-            return JsonResponse({"error": "You are not authorized to edit this post."}, status=403)
-        
-        # If the user is submitting an edit
-        if request.method == "POST":
-            data = json.loads(request.body)
-            content = data.get("content", "")
-            post.content = content
-            post.save()
-            return JsonResponse({"message": "Post edited successfully."}, status=201)
-        
-    # Handle post not found error
-    except Post.DoesNotExist:
-        return JsonResponse({"error": "Post not found."}, status=404)
     
 @login_required
 def like (request, post_id):
-    try:
-        # Get the post
-        post = Post.objects.get(id=post_id)
-        # If the user has already liked the post, unlike it
-        if request.user in post.likes.all():
-            post.add_like(request.user)
-            return JsonResponse({"message": "Post liked successfully."}, status=201)
-        # If the user has not liked the post, like it
-        else:
-            post.remove_like(request.user)
-            return JsonResponse({"message": "Post unliked successfully."}, status=201)
-    # Handle post not found error
-    except Post.DoesNotExist:
-        return JsonResponse({"error": "Post not found."}, status=404)
+    # Get the post
+    post = get_object_or_404(Post, id=post_id)
+    # If the user has already liked the post, unlike it
+    if request.user in post.likes.all():
+        post.add_like(request.user)
+        return JsonResponse({"message": "Post liked successfully."}, status=201)
+    # If the user has not liked the post, like it
+    else:
+        post.remove_like(request.user)
+        return JsonResponse({"message": "Post unliked successfully."}, status=201)
