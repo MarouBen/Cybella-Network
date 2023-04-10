@@ -1,6 +1,8 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
@@ -142,4 +144,15 @@ def following_posts(request):
         "posts": posts
     })
     
-
+@login_required
+def edit_post(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+        if request.method == "POST":
+            data = json.loads(request.body)
+            content = data.get("content", "")
+            post.content = content
+            post.save()
+            return JsonResponse({"message": "Post edited successfully."}, status=201)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
