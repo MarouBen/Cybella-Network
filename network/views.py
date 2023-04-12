@@ -73,7 +73,7 @@ def login_view(request):
         else:
             return JsonResponse({'success': False, 'message': 'Invalid email and/or password.'})
     else:
-        return render(request, "mail/login.html")
+        return render(request, "network/login.html")
 
 
 def logout_view(request):
@@ -103,7 +103,7 @@ def register(request):
         return JsonResponse({'success': True, 'redirect': reverse("index")})
 
     else:
-        return render(request, "mail/login.html")
+        return render(request, "network/login.html")
     
 @login_required
 def new_post(request):

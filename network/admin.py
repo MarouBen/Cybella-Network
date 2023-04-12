@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import User, Post
+from .models import User, Post
 
 class UserAdmin(admin.ModelAdmin):
     # Customization for User model in admin site
