@@ -713,6 +713,38 @@ select {
   }
 }
 
+.aspect-w-4 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  --tw-aspect-w: 4;
+}
+
+.aspect-w-4 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.aspect-w-2 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  --tw-aspect-w: 2;
+}
+
+.aspect-w-2 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -797,6 +829,14 @@ select {
   margin-top: 1.5rem;
 }
 
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
 .block {
   display: block;
 }
@@ -821,12 +861,60 @@ select {
   display: none;
 }
 
+.aspect-3 {
+  aspect-ratio: 3;
+}
+
+.aspect-1 {
+  aspect-ratio: 1;
+}
+
+.aspect-6 {
+  aspect-ratio: 6;
+}
+
+.aspect-4 {
+  aspect-ratio: 4;
+}
+
+.aspect-5 {
+  aspect-ratio: 5;
+}
+
+.aspect-8 {
+  aspect-ratio: 8;
+}
+
+.aspect-16 {
+  aspect-ratio: 16;
+}
+
+.aspect-2 {
+  aspect-ratio: 2;
+}
+
 .h-full {
   height: 100%;
 }
 
 .h-screen {
   height: 100vh;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-12 {
+  height: 3rem;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-16 {
+  height: 4rem;
 }
 
 .w-3\/4 {
@@ -847,6 +935,19 @@ select {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-\[375px\] {
+  width: 375px;
+}
+
+.w-\[3275px\] {
+  width: 3275px;
+}
+
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 .flex-grow {
@@ -940,6 +1041,10 @@ select {
   padding: 0.75rem;
 }
 
+.p-1 {
+  padding: 0.25rem;
+}
+
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -960,6 +1065,18 @@ select {
 
 .pt-3 {
   padding-top: 0.75rem;
+}
+
+.pt-1 {
+  padding-top: 0.25rem;
+}
+
+.pt-0 {
+  padding-top: 0px;
+}
+
+.pt-0\.5 {
+  padding-top: 0.125rem;
 }
 
 .text-center {
@@ -1046,5 +1163,17 @@ select {
 
   .lg\:max-w-md {
     max-width: 28rem;
+  }
+
+  .lg\:max-w-lg {
+    max-width: 32rem;
+  }
+
+  .lg\:max-w-\[\] {
+    max-width: ;
+  }
+
+  .lg\:max-w-\[600px\] {
+    max-width: 600px;
   }
 }
