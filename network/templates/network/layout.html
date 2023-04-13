@@ -8,36 +8,34 @@
         {% block styles %}
         {% endblock %}
         {% tailwind_css %}
+        <link rel ="stylesheet" href="{% static 'network/css/styles.css' %}">
+        <script src="https://kit.fontawesome.com/d61c00eed6.js" crossorigin="anonymous"></script>
         {% block script %}
         {% endblock %}
     </head>
     <body class="overflow-hidden w-screen h-screen flex flex-row">
         <!-- Sidebar -->
-        <nav class="container lg:max-w-md flex flex-col p-2  flex-grow bg-slate-500 h-screen items-end">
+        <nav class=" container lg:max-w-md flex flex-col p-2  flex-grow bg-slate-500 h-screen items-end ">
 
-            <div class=" bg-violet-500">
-
-                <div id="logo" class="">
-                    <div class="flex text-center my-3 pl-4">
-                        <img src="{% static 'network/Images/CM_logo.png' %}" alt="logo" class="">
-                        <h1 class="text-white font-bold text-xl pl-0 pt-3">Cybella</h1>
-                    </div>
-                </div>
+            <div class="sidebar flex flex-col bg-violet-500 text-xl font-normal text-white w-[275px] h-full justify-between">
 
                 <div class="w-full">
-                    {% if user.is_authenticated %}
-                        <div><strong>{{ user.username|title }}</strong></div>
-                        <div><a class="nav-link" href="#">All Posts</a></div>
-                        <div><a class="nav-link" href="#">Following</a></div>
-                        <div><a class="nav-link" href="{% url 'logout' %}">Log Out</a></div>
-                    {% else %}
-                        <div><a class="nav-link" href="#">All Posts</a></div>
-                        <div><a class="nav-link" href="{% url 'login' %}">Log In/Register</a></div>
-                    {% endif %}
+                    <div id="logo" class="">
+                        <div class="flex text-center my-3 pl-4">
+                            <img src="{% static 'network/Images/CM_logo.png' %}" alt="logo" class="">
+                            <h1 class="text-white font-bold text-xl pl-0 pt-3">Cybella</h1>
+                        </div>
+                    </div>
+                    <a class="flex py-1 text-center sidebar-link" href="#"><div class=" p-2 px-5 justify-center"><i class="fa-solid fa-house text-xl mr-8 w-4"></i><span class="font-bold">Home</span></div></a>
+                    <a class="flex py-1 text-center sidebar-link" href="#"><div class="p-2 px-5 justify-center"><i class="fa-solid fa-tag text-2xl mr-8 w-4 "></i><span>Following</span></div></a>
                 </div>
 
                 <div>
-
+                    {% if user.is_authenticated %}
+                        <a class="p-2 text-center logout flex justify-between" href="{% url 'logout' %}"><span>{{user.email}}</span><i class="fa-solid fa-right-from-bracket text-2xl"></i></a>
+                    {% else %}
+                        <a class="py-1 text-center sidebar-link flex justify-between" href="{% url 'login' %}"><span>Log In/Register</span><i class="fa-solid fa-right-to-bracket text-2xl"></i></a>
+                    {% endif %}
                 </div>
 
             </div>

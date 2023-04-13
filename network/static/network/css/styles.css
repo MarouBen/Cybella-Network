@@ -1,0 +1,15 @@
+
+*{
+    font-family:"TwitterChirp",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+
+.sidebar-link:hover{
+    width: fit-content;
+    background-color: rgba(47,51,54);
+    border-radius: 9999px;
+}
+.logout:hover{
+    background-color: rgba(47,51,54);
+    border-radius: 9999px;
+}
