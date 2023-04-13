@@ -65,13 +65,13 @@ def login_view(request):
         email = request.POST["email"]
         password = request.POST["password"]
         user = authenticate(request, username=email, password=password)
-
+        
         # Check if authentication successful
         if user is not None:
             login(request, user)
             return JsonResponse({'success': True, 'redirect': reverse("index")})
         else:
-            return JsonResponse({'success': False, 'message': 'Invalid email and/or password.'})
+            return JsonResponse({'Error': False, 'message': 'Invalid email and/or password.'})
     else:
         return render(request, "network/login.html")
 
@@ -85,19 +85,23 @@ def register(request):
     if request.method == "POST":
         email = request.POST["email"]
         username = request.POST["username"]
+        
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return JsonResponse({'success': False, 'message': 'Passwords must match.'})
+            return JsonResponse({'Error': False, 'message': 'Passwords must match.'})
 
         # Attempt to create new user
         try:
+            # Check if email already exists
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({'Error': False, 'message': 'Email address already taken.'})
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError as e:
             print(e)
-            return JsonResponse({'success': False, 'message': 'Email address already taken.'})
+            return JsonResponse({'Error': False, 'message': 'Username already taken.'})
 
         login(request, user)
         return JsonResponse({'success': True, 'redirect': reverse("index")})

@@ -14,37 +14,32 @@
     <body class="overflow-hidden w-screen h-screen flex flex-row">
         <!-- Sidebar -->
         <nav class="container lg:max-w-md flex flex-col p-2  flex-grow bg-slate-500 h-screen items-end">
+
             <div class=" bg-violet-500">
+
                 <div id="logo" class="">
                     <div class="flex text-center my-3 pl-4">
                         <img src="{% static 'network/Images/CM_logo.png' %}" alt="logo" class="">
                         <h1 class="text-white font-bold text-xl pl-0 pt-3">Cybella</h1>
                     </div>
                 </div>
-                <div>
-                <ul class="navbar-nav mr-auto">
+
+                <div class="">
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                    </li>
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Following</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                        </li>
+                        <div><strong>{{ user.username }}</strong></div>
+                        <div><a class="nav-link" href="#">All Posts</a></div>
+                        <div><a class="nav-link" href="#">Following</a></div>
+                        <div><a class="nav-link" href="{% url 'logout' %}">Log Out</a></div>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Log In/Register</a>
-                        </li>
+                        <div><a class="nav-link" href="#">All Posts</a></div>
+                        <div><a class="nav-link" href="{% url 'login' %}">Log In/Register</a></div>
                     {% endif %}
-                </ul>
                 </div>
+
+                <div>
+                    
+                </div>
+
             </div>
         </nav>
         <!-- Sidebar -->

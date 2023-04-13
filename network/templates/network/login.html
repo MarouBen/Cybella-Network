@@ -36,7 +36,7 @@
                         {% csrf_token %} 
                         <h1 class="font-semibold text-4xl mb-5">Login here</h1>
                         <div class="textInputWrapper">
-                            <input class="LR_input"  type="email" name="email" placeholder="Email" required>
+                            <input class="LR_input"  type="text" name="email" placeholder="Username" required>
                         </div>
                         <div class="textInputWrapper">
                             <input class="LR_input" type="password" placeholder="Password"  name="password" required>
@@ -53,7 +53,7 @@
                     <form class="sliding_form R_form transition-all" action="{% url 'register' %}" method="post" onsubmit="register()">
                         {% csrf_token %}
                         <h1 class="title1 font-semibold text-4xl">Register here</h1>
-                        <div class="textInputWrapper"><input class="LR_input" type="text" placeholder="Username"></div>
+                        <div class="textInputWrapper"><input class="LR_input" type="text" placeholder="Username" name="username" required></div>
                         <div class="textInputWrapper"><input class="LR_input" type="email" placeholder="Email" name="email" required></div>
                         <div class="textInputWrapper"><input class="LR_input" type="password" placeholder="Password" name="password" required></div>
                         <div class="textInputWrapper"><input class="LR_input" type="password" placeholder="Confirm Password"  name="confirmation" required></div>
