@@ -24,9 +24,9 @@
                     </div>
                 </div>
 
-                <div class="">
+                <div class="w-full">
                     {% if user.is_authenticated %}
-                        <div><strong>{{ user.username }}</strong></div>
+                        <div><strong>{{ user.username|title }}</strong></div>
                         <div><a class="nav-link" href="#">All Posts</a></div>
                         <div><a class="nav-link" href="#">Following</a></div>
                         <div><a class="nav-link" href="{% url 'logout' %}">Log Out</a></div>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div>
-                    
+
                 </div>
 
             </div>
