@@ -15,7 +15,7 @@
     </head>
     <body class="overflow-hidden w-screen h-screen flex flex-row">
         <!-- Sidebar -->
-        <nav class=" container  max-w-[35%] flex flex-col p-2  flex-grow bg-gray-800 h-screen items-end fixed">
+        <nav class=" container  max-w-[31%] flex flex-col p-2  flex-grow bg-gray-800 h-screen items-end fixed">
 
             <div class="sidebar flex flex-col text-xl font-normal text-white w-[275px] h-full justify-between">
 
@@ -25,12 +25,12 @@
                             <img src="{% static 'network/Images/C_logo.png' %}" alt="logo" class="w-18 h-16">
                         </div>
                     </div>
-                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class=" p-2 px-5 justify-center"><i class="fa-solid fa-house text-xl mr-8 w-4"></i><span class="font-bold">Home</span></div></a>
+                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class=" p-2 px-5 justify-center"><i class="fa-solid fa-house-user text-2xl mr-8 w-4"></i><span class="font-bold">Home</span></div></a>
                     <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-solid fa-tag text-2xl mr-8 w-4 "></i><span>Following</span></div></a>
-                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-solid fa-bell text-2xl mr-8 w-4"></i><span>Notifications</span></div></a>
-                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-solid fa-envelope text-2xl mr-8 w-4"></i><span>Messages</span></div></a>
-                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-solid fa-bookmark text-2xl mr-8 w-4"></i><span>Bookmarks</span></div></a>
-                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-solid fa-user text-2xl mr-8 w-4"></i><span>Profile</span></div></a>
+                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-regular fa-bell text-2xl mr-8 w-4"></i><span>Notifications</span></div></a>
+                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-regular fa-envelope text-2xl mr-8 w-4"></i><span>Messages</span></div></a>
+                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-regular fa-bookmark text-2xl mr-8 w-4"></i><span>Bookmarks</span></div></a>
+                    <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-regular fa-user text-2xl mr-8 w-4"></i><span>Profile</span></div></a>
                     <a class="flex py-1 text-center sidebar-link my-2" href="#"><div class="p-2 px-5 justify-center"><i class="fa-solid fa-cog text-2xl mr-8 w-4"></i><span>Settings</span></div></a>
 
                     <button class="tweet mt-6">
@@ -49,12 +49,15 @@
             </div>
         </nav>
         <!-- Sidebar -->
-        <div class="body h-screen flex flex-row w-[65%] ml-[35%]">
-            <div class="bg-red-300 flex-grow">
+        <div class="body h-screen flex flex-row w-[69%] ml-[31%] ">
+            <div class="bg-gray-800 flex-grow relative border-x border-gray-600">
+                <div class=" w-full backdrop-blur-md backdrop-filter h-24 bg-gray-800 sticky p-3 text-xl text-white font-bold border-b border-gray-600">
+                    Home
+                </div>
                 {% block body %}
                 {% endblock %}
             </div>
-            <div class="bg-blue-300 flex-grow">
+            <div class="bg-gray-800 flex-grow">
                 {% block footer %}
                 {% endblock %}
             </div>

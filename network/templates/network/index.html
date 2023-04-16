@@ -1,7 +1,24 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    body
+    <div class="w-full  mx-auto bg-gray-800   p-6 text-white border-b border-gray-600">
+        <form>
+            <div class="flex">
+                <img class="w-10 h-10 rounded-full mr-2" src="profile-avatar.jpg" alt="Profile Avatar">
+                
+                <div class="w-full">
+                    <span class="font-semibold text-white">{{user.username|title}}</span>
+                    <textarea class="w-full h-20 p-2 focus:outline-offset-0 focus:ring-0 bg-gray-800 border-0 border-b border-gray-600" placeholder="What's happening?"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-between mt-4">
+                <div class="flex items-center">
+                    
+                </div>
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none">Tweet</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 {% block footer %}
     footer
