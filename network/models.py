@@ -51,7 +51,7 @@ class User(AbstractUser):
 
 
 class Post(models.Model):
-    """ Post model. Each post has a user, content, timestamp, and likes. """
+    """ Post model. Each post has a user, content, timestamp, likes and images. """
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     content = models.CharField(max_length=500)
