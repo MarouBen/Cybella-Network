@@ -15,14 +15,10 @@
 }
 
 .tweet {
-    
     background-color: #2ea5e0;
     border-radius: 9999px;
-    padding-top: 12px;
-    padding-bottom: 12px;
     transition: all ease-in-out 0.2s;
-    font-size: 18px;
-    width: 90%;
+
 }
    
 .tweet span {

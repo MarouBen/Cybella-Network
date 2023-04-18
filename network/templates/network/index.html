@@ -1,24 +1,37 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="w-full  mx-auto bg-gray-800   p-6 text-white border-b border-gray-600">
+    <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
         <form>
+            {%csrf_token%}
             <div class="flex">
-                <img class="w-10 h-10 rounded-full mr-2" src="profile-avatar.jpg" alt="Profile Avatar">
+                <img class="w-14 h-12 rounded-full mr-2" src="profile-avatar.jpg" alt="Profile Avatar">
                 
-                <div class="w-full">
+                <div class="w-full text-xl">
                     <span class="font-semibold text-white">{{user.username|title}}</span>
-                    <textarea class="w-full h-20 p-2 focus:outline-offset-0 focus:ring-0 bg-gray-800 border-0 border-b border-gray-600" placeholder="What's happening?"></textarea>
+                    <textarea oninput="resize()" class="text-xl w-full min-h-14 p-2 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                    placeholder="What's happening?"></textarea>
+                    <div id="images-container"></div>
                 </div>
             </div>
-            <div class="flex justify-between mt-4">
-                <div class="flex items-center">
-                    
-                </div>
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none">Post</button>
+            <div class="flex justify-between mt-2 ml-12">
+                <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 p-1 px-2 " alt="Media">
+                    <i class="fa-solid fa-image text-2xl text-sky-500"></i>
+                    <input type="file" name="I" id="I" value="{{I}}" accept="image/*,jpg,jpeg,png" multiple hidden/>
+                </label>
+                <button class="tweet w-[20%] px-1 py-2">
+                    <span>Post</span>
+                </button>
             </div>
         </form>
     </div>
+    <script>
+        function resize(){
+            var text = document.querySelector('textarea');
+            text.style.height = "auto";
+            text.style.height = text.scrollHeight + "px";
+        }
+    </script>
 {% endblock %}
 {% block footer %}
     footer
