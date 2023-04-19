@@ -1,0 +1,77 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
+        <form>
+            {%csrf_token%}
+            <div class="flex">
+                {%if user.is_authenticated %}
+                    <img class="w-14 h-12 rounded-full mr-2" src="{{user.picture.url}}" alt="Profile Avatar">
+                {%else%}
+                    <img class="w-14 h-12 rounded-full mr-2" src="{% static 'network/Images/default.png' %}" alt="Profile Avatar">
+                {%endif%}
+                
+                <div class="w-full text-xl">
+                    <textarea oninput="resize()" class="text-xl h-12 w-full p-2 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                        placeholder="What's happening?"></textarea>
+                    <div id="images-container" class=""></div>
+                </div>
+            </div>
+            <div class="flex justify-between mt-2 ml-14">
+                <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2" alt="Media">
+                    <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
+                    <input type="file" name="I" id="I" value="{{I}}" accept="image/*,jpg,jpeg,png" onchange="previewImages()" multiple hidden/>
+                </label>
+                <button class="tweet w-[20%] px-1 py-2"> <span>Post</span></button>
+            </div>
+        </form>
+    </div>
+    {%for post in posts%}
+        <div id="posts" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600">
+            <div class="flex">
+                <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
+                
+                <div class="w-full">
+                    <span class="font-bold">{{post.user|title}}</span>
+                    <div class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 ">{{post.content}}</div>
+                    <div id="images-container" class=""></div>
+                </div>
+            </div>
+            <div class="flex justify-between mt-1 mx-20 text-gray-500">
+                <div class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">10</span></div>
+                <div class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">10</span></div>
+                <div class="flex hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i></div>
+            </div>
+        </div>
+    {%endfor%}
+    <script>
+        function resize(){
+            var text = document.querySelector('textarea');
+            text.style.height = "auto";
+            text.style.height = text.scrollHeight + "px";
+        }
+        
+        function previewImages(){
+            const preview = document.querySelector('#images-container');
+            const files = document.querySelector('input[type=file]').files;
+            preview.innerHTML = "";
+            if(files){
+                Array.from(files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.addEventListener("load", function(){
+                        const image = new Image();
+                        image.title = file.name;
+                        image.src = this.result;
+                        image.classList.add("max-w-xs", "max-h-xs");
+                        preview.appendChild(image);
+                    });
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+    </script>
+{% endblock %}
+{% block footer %}
+    footer
+{% endblock %}

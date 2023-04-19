@@ -54,10 +54,6 @@ class ProfileView(View):
             })
             
 
-def index(request):
-    return render(request, "network/index.html")
-
-
 def login_view(request):
     if request.method == "POST":
 
@@ -121,23 +117,26 @@ def new_post(request):
     else:
         return render(request, "network/new_post.html")
     
+    
 def all_posts(request):
     # Get all posts
-    posts = Post.objects.order_by("timestamp").all()
+    posts_list = Post.objects.order_by("-timestamp").all()
     # Paginate posts with 10 posts per page
-    paginator = Paginator(all_posts, 10)
+    paginator = Paginator(posts_list, 10)
     page = request.GET.get('page')
     posts = paginator.get_page(page)
+    
     return render(request, "network/all_posts.html", {
         "posts": posts
     })
     
+    
 @login_required
 def following_posts(request):
     # Get all posts from users that the current user is following
-    posts = Post.objects.filter(user__in=request.user.following.all()).order_by("timestamp").all()
+    posts_list = Post.objects.filter(user__in=request.user.following.all()).order_by("timestamp").all()
     # Paginate posts with 10 posts per page
-    paginator = Paginator(following_posts, 10)
+    paginator = Paginator(posts_list, 10)
     page = request.GET.get('page')
     posts = paginator.get_page(page)
 
