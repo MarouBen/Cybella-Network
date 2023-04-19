@@ -5,6 +5,7 @@
     <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
         <form>
             {%csrf_token%}
+
             <div class="flex">
                 {%if user.is_authenticated %}
                     <img class="w-14 h-12 rounded-full mr-2" src="{{user.picture.url}}" alt="Profile Avatar">
@@ -18,14 +19,17 @@
                     <div id="images-container" class=""></div>
                 </div>
             </div>
+
             <div class="flex justify-between mt-2 ml-14">
                 <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2.5" alt="Media">
                     <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
-                    <input type="file" name="I" id="I" value="{{I}}" accept="image/*,jpg,jpeg,png" onchange="previewImages()" multiple hidden/>
+                    <input type="file" name="I" id="I" value="{{I}}" accept="image/*,jpg,jpeg,png" onchange="previewImages()" hidden/>
                 </label>
                 <button class="tweet w-[20%] px-1 py-2"> <span>Post</span></button>
             </div>
+
         </form>
+
     </div>
     {%for post in posts%}
         <div id="posts" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600">
@@ -35,7 +39,12 @@
                 <div class="w-full">
                     <span class="font-bold">{{post.user|title}}</span>
                     <div class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 ">{{post.content}}</div>
-                    <div id="images-container" class=""></div>
+                    {% if post.images %}
+                        <div id="images-container" class="">
+                            <img class="max-w-xs max-h-xs rounded" src="{{post.images.url}}" alt="post image"> 
+                        </div> 
+                    {%endif%}
+
                 </div>
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
