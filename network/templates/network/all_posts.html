@@ -37,7 +37,17 @@
                 <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
                 
                 <div class="w-full">
-                    <span class="font-bold">{{post.user|title}}</span>
+                    <div class="flex justify-between">
+                        <div>
+                            <span class="font-bold">{{post.user|title}}</span>
+                            <span class="text-gray-500 text-[13px]">{{post.timestamp|timesince}} ago</span>
+                            <span class="text-gray-500 text-[13px]">•</span>
+                            <span class="text-gray-500 text-[13px]">Public</span>
+                        </div>
+                        <div>
+                            <i class="fa-solid fa-ellipsis-h text-gray-500 text-xl"></i>
+                        </div>
+                    </div>
                     <div class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 ">{{post.content}}</div>
                     {% if post.images %}
                         <div id="images-container" class="">
