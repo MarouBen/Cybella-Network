@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="flex justify-between mt-2 ml-14">
-                <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2" alt="Media">
+                <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2.5" alt="Media">
                     <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
                     <input type="file" name="I" id="I" value="{{I}}" accept="image/*,jpg,jpeg,png" onchange="previewImages()" multiple hidden/>
                 </label>
@@ -39,8 +39,8 @@
                 </div>
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
-                <div class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">10</span></div>
-                <div class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">10</span></div>
+                <div class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
+                <div class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
                 <div class="flex hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i></div>
             </div>
         </div>

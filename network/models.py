@@ -87,3 +87,22 @@ class Post(models.Model):
     def __str__(self):
         return f"{self.user.username}'s post ({self.id})"
         
+        
+class comments(models.Model):
+    """ Comments model. Each comment has a user, post, content, timestamp. """
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post")
+    content = models.CharField(max_length=500)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user.username,
+            "content": self.content,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+        }
+    
+    def __str__(self):
+        return f"{self.user.username}'s comment ({self.id})"
