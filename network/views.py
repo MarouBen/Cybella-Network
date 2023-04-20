@@ -109,9 +109,10 @@ def register(request):
 def new_post(request):
     # If the user is submitting a new post
     if request.method == "POST":
+        image = request.FILES.get("I", None)
         content = request.POST.get("content", "")
         user = request.user
-        post = Post(user=user, content=content)
+        post = Post(user=user, content=content, images=image)
         post.save()
         return HttpResponseRedirect(reverse("index"))
     else:
