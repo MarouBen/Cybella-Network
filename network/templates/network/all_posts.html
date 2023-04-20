@@ -79,14 +79,14 @@
                     <div class="w-full">
                         <div class="flex pt-1">
                             <div>
-                                <span id="username" class="font-bold">Username</span>
-                                <span id="timestamp" class="text-gray-500 text-[13px]">posted xx ago</span>
+                                <span id="username" class="font-bold"></span>
+                                <span id="timestamp" class="text-gray-500 text-[13px]"></span>
                                 <span class="text-gray-500 text-[13px]">•</span>
                                 <span class="text-gray-500 text-[13px]">Public</span>
                             </div>
                         </div>
                         <div id="content" class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 "></div>
-                        <div class=" text-gray-500 text-[14px] w-full pl-0 pt-0 p-2  ">Replying to <span>username</span></div>
+                        <div class=" text-gray-500 text-[14px] w-full pl-0 pt-0 p-2  ">Replying to <span></span></div>
                     </div>
                 </div>
             </div>
@@ -139,7 +139,7 @@
             var reply_pic = document.querySelector("#reply_pic");
             reply_pic.src = url;  
             username.innerHTML = u;
-            timestamp.innerHTML = t;
+            timestamp.innerHTML = t + " ago";
             content.innerHTML = c;
             
             var commentBox = document.getElementById("overlay");
