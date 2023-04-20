@@ -68,6 +68,21 @@
             </div>
         </div>
     {%endfor%}
+
+    <div class="w-full mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
+        <div class="flex justify-center">
+            <div class="flex">
+                {% if posts.has_previous %}
+                    <a href="?page={{ posts.previous_page_number }}" class="text-gray-500 text-xl hover:text-blue-400 hover:cursor-pointer">Previous</a>
+                {% endif %}
+                <span class="text-gray-500 text-xl mx-2">Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
+                {% if posts.has_next %}
+                    <a href="?page={{ posts.next_page_number }}" class="text-gray-500 text-xl hover:text-blue-400 hover:cursor-pointer">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
     <script>
         // function that will resize the textarea
         function resize(){
