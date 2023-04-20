@@ -9,4 +9,5 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("like/<int:post_id>",views.like, name="like"),
+    path("comment/<int:post_id>",views.comment, name="comment"),
 ]
