@@ -10,7 +10,7 @@ from django.views import View
 from django.shortcuts import render,get_object_or_404
 from django.urls import reverse,reverse_lazy
 
-from .models import User,Post
+from .models import User,Post,Comment
 
 @login_required
 class ProfileView(View):
@@ -173,6 +173,10 @@ def edit_post(request, post_id):
     
 @login_required
 def like (request, post_id):
+    # Check if user is authenticated
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "You must be logged in to like a post."}, status=403)
+
     # Get the post
     post = get_object_or_404(Post, id=post_id)
     # If the user has already liked the post, unlike it
@@ -183,3 +187,27 @@ def like (request, post_id):
     else:
         post.remove_like(request.user)
         return JsonResponse({"message": "Post unliked successfully."}, status=201)
+    
+    
+@login_required
+def comment(request, post_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    # Get the post
+    post = get_object_or_404(Post, id=post_id)
+    # If the user is submitting a comment
+    if request.method == "POST":
+        content = request.POST.get("c", "")
+        user = request.user
+        comment = Comment(user=user, post=post, content=content)
+        comment.save()
+        #return HttpResponseRedirect(reverse("post", args=[post_id]))
+        return HttpResponseRedirect(reverse("index"))
+        
+    # If the user is requesting the comments
+    # else:
+    #     comments = post.comments.all()
+    #     return render(request, "network/post.html", {
+    #         "comments": comments,
+    #         "post_id": post_id
+    #     }) 

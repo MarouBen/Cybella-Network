@@ -133,7 +133,6 @@
 
     <script>
         function openCommentBox(u,t,c,url) {
-            console.log(url);
             var username = document.querySelector("#username");
             var timestamp = document.querySelector("#timestamp");
             var content = document.querySelector("#content");
@@ -203,25 +202,33 @@
         function like(element, id){
             //send a request to the server
             fetch(`/like/${id}`)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result);
+            .then(response => {
+                if (response.ok) {
+                    // Request succeeded, handle the response
+                    response.json();
+                    //get the heart of the div that called the function
+                    const heart = element.querySelector('i');
+                    //change the color of the heart of the div that called the function
+                    element.classList.toggle("text-rose-400");
+                    heart.classList.toggle("fa-regular");
+                    heart.classList.toggle("fa-solid");
+                    //get the number of likes
+                    var likes = element.querySelector('span');
+                    //change the number of likes
+                    if(element.classList.contains("text-rose-400")){
+                        likes.innerHTML = parseInt(likes.innerHTML) + 1;
+                    }else{
+                        likes.innerHTML = parseInt(likes.innerHTML) - 1;
+                    }
+                } 
+                else {
+                // Request failed, throw an error
+                throw new Error("Error");
+                }
+            })
+            .catch(error => {
+                return alert("Please log in first");
             });
-
-            //get the heart of the div that called the function
-            const heart = element.querySelector('i');
-            //change the color of the heart of the div that called the function
-            element.classList.toggle("text-rose-400");
-            heart.classList.toggle("fa-regular");
-            heart.classList.toggle("fa-solid");
-            //get the number of likes
-            var likes = element.querySelector('span');
-            //change the number of likes
-            if(element.classList.contains("text-rose-400")){
-                likes.innerHTML = parseInt(likes.innerHTML) + 1;
-            }else{
-                likes.innerHTML = parseInt(likes.innerHTML) - 1;
-            }
         }
     </script>
 {% endblock %}
