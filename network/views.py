@@ -211,3 +211,21 @@ def comment(request, post_id):
     #         "comments": comments,
     #         "post_id": post_id
     #     }) 
+
+# function to repost a post
+@login_required
+def repost(request, post_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "You must be logged in to like a post."}, status=403)
+    # Get the post
+    original_post = get_object_or_404(Post, id=post_id)
+    # If the user is submitting a repost
+    user = request.user
+    # unpost if already reposted
+    if Post.objects.filter(user=user, repost=original_post).exists():
+        Post.objects.filter(user=user, repost=original_post).delete()
+        return JsonResponse({"message": "Post unposted successfully."}, status=201)
+    else:
+        repost = Post(user=user, content=f"Reposted from {user.username}: {original_post.content}", images=original_post.images, repost=original_post)
+        repost.save()
+        return JsonResponse({"message": "Post reposted successfully."}, status=201)

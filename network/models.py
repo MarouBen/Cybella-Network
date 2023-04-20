@@ -58,6 +58,7 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, blank=True, related_name="liked_posts")
     images = models.ImageField(upload_to="network/images/posts", blank=True, null=True)
+    repost = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name="reposts")
 
     def serialize(self):
         return {
@@ -84,8 +85,13 @@ class Post(models.Model):
         """ Return number of likes """
         return self.likes.count()
     
+    def is_reposted(self, user):
+        """ Return True if user reposted """
+        return self.reposts.filter(user=user).exists()
+    
     def __str__(self):
         return f"{self.user.username}'s post ({self.id})"
+        
         
         
 class Comment(models.Model):

@@ -1,5 +1,6 @@
 {% extends "network/layout.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block body %}
     <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600 ">
@@ -63,7 +64,12 @@
                 {%else%}
                     <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer text-rose-400"><i class="fa-solid fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
                 {%endif%}
-                <div class="flex hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i></div>
+
+                {% if not post|is_reposted_by_user:user%}
+                    <div id="repost" onclick="repost(this,{{post.id}})" class="flex hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.reposts.count}}</span></div>
+                {%else%}
+                    <div id="repost" onclick="repost(this,{{post.id}})" class="flex text-emerald-500 hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.reposts.count}}</span></div>
+                {%endif%}
             </div>
         </div>
     {%endfor%}
@@ -222,6 +228,36 @@
                         likes.innerHTML = parseInt(likes.innerHTML) + 1;
                     }else{
                         likes.innerHTML = parseInt(likes.innerHTML) - 1;
+                    }
+                } 
+                else {
+                // Request failed, throw an error
+                throw new Error("Error");
+                }
+            })
+            .catch(error => {
+                return alert("Please log in first");
+            });
+        }
+        // function to repost the post
+        function repost(element, id){
+            //send a request to the server
+            fetch(`/repost/${id}`)
+            .then(response => {
+                if (response.ok) {
+                    // Request succeeded, handle the response
+                    response.json();
+                    //get the repost of the div that called the function
+                    const repost = element.querySelector('i');
+                    //change the color of the repost of the div that called the function
+                    element.classList.toggle("text-emerald-500");
+                    //get the number of reposts
+                    var reposts = element.querySelector('span');
+                    //change the number of reposts
+                    if(element.classList.contains("text-emerald-500")){
+                        reposts.innerHTML = parseInt(reposts.innerHTML) + 1;
+                    }else{
+                        reposts.innerHTML = parseInt(reposts.innerHTML) - 1;
                     }
                 } 
                 else {
