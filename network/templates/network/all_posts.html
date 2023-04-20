@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-    <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
+    <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600 ">
         <form method="Post" action="{% url 'index' %}" enctype="multipart/form-data">
             {%csrf_token%}
 
@@ -14,7 +14,7 @@
                 {%endif%}
                 
                 <div class="w-full text-xl">
-                    <textarea name="content" oninput="resize()" class="text-xl h-12 w-full p-2 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                    <textarea name="content" oninput="resize(this)" class="text-xl h-12 w-full p-2 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
                         placeholder="What's happening?"></textarea>
                     <div id="images-container" class=""></div>
                 </div>
@@ -27,10 +27,9 @@
                 </label>
                 <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Post</span></button>
             </div>
-
         </form>
-
     </div>
+
     {%for post in posts%}
         <div id="posts" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600">
             <div class="flex">
@@ -58,7 +57,7 @@
                 </div>
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
-                <div class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
+                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
                 {% if user not in post.likes.all%}
                     <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
                 {%else%}
@@ -68,6 +67,55 @@
             </div>
         </div>
     {%endfor%}
+
+    <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden">
+        <div id="commentbox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
+
+            <div onclick="closeCommentBox()" class="relative mb-8 inset-2 text-white text-xl hover:cursor-pointer"><i class="fa-solid fa-xmark"></i></div>
+            <div id="posts" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white">
+                <div class="flex">
+                    <img id="reply_pic" class="w-14 h-12 rounded-full mr-2" src="" alt="user Avatar">
+                    
+                    <div class="w-full">
+                        <div class="flex pt-1">
+                            <div>
+                                <span id="username" class="font-bold">Username</span>
+                                <span id="timestamp" class="text-gray-500 text-[13px]">posted xx ago</span>
+                                <span class="text-gray-500 text-[13px]">•</span>
+                                <span class="text-gray-500 text-[13px]">Public</span>
+                            </div>
+                        </div>
+                        <div id="content" class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 "></div>
+                        <div class=" text-gray-500 text-[14px] w-full pl-0 pt-0 p-2  ">Replying to <span>username</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" w-full min-h-[185px] mx-auto bg-gray-800 p-2 text-white ">
+                <form class="h-full" method="Post" action="" enctype="multipart/form-data">
+                    {%csrf_token%}
+
+                    <div class="flex">
+                        {%if user.is_authenticated %}
+                            <img class="w-14 h-12 rounded-full mr-2" src="{{user.picture.url}}" alt="Profile Avatar">
+                        {%else%}
+                            <img class="w-14 h-12 rounded-full mr-2" src="{% static 'network/Images/default.png' %}" alt="Profile Avatar">
+                        {%endif%}
+                        
+                        <div class="w-full text-xl">
+                            <textarea name="content" oninput="resize(this)"  class="text-xl h-28 w-full p-2 overflow-y-hidden bg-gray-800 resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                                placeholder="Post your reply"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-2 ml-14">
+                        <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Reply</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
 
     <div class="w-full mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
         <div class="flex justify-center">
@@ -84,11 +132,39 @@
     </div>
 
     <script>
+        function openCommentBox(u,t,c,url) {
+            console.log(url);
+            var username = document.querySelector("#username");
+            var timestamp = document.querySelector("#timestamp");
+            var content = document.querySelector("#content");
+            var reply_pic = document.querySelector("#reply_pic");
+            reply_pic.src = url;  
+            username.innerHTML = u;
+            timestamp.innerHTML = t;
+            content.innerHTML = c;
+            
+            var commentBox = document.getElementById("overlay");
+            commentBox.classList.remove("hidden");
+          }
+          
+        function closeCommentBox() {
+            var commentBox = document.getElementById("overlay");
+            commentBox.classList.add("hidden");
+          }
+          
+          // Close the comment box if the user clicks outside of it
+        window.onclick = function(event) {
+            var commentBox = document.getElementById("overlay");
+            if (event.target == commentBox) {
+              commentBox.classList.add("hidden");
+            }
+          }
+
         // function that will resize the textarea
-        function resize(){
-            var text = document.querySelector('textarea');
-            text.style.height = "auto";
-            text.style.height = text.scrollHeight + "px";
+        function resize(element){
+            element.style.height = "auto";
+            element.style.height = element.scrollHeight + "px";
+            
         }
         // function that will preview the images
         function previewImages(){
