@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
-                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
+                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}','{{post.id}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
                 {% if user not in post.likes.all%}
                     <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
                 {%else%}
@@ -92,7 +92,7 @@
             </div>
 
             <div class=" w-full min-h-[185px] mx-auto bg-gray-800 p-2 text-white ">
-                <form class="h-full" method="Post" action="" enctype="multipart/form-data">
+                <form id="reply_form" class="h-full" method="Post" action="" enctype="multipart/form-data">
                     {%csrf_token%}
 
                     <div class="flex">
@@ -132,11 +132,14 @@
     </div>
 
     <script>
-        function openCommentBox(u,t,c,url) {
+        function openCommentBox(u,t,c,url,id) {
             var username = document.querySelector("#username");
             var timestamp = document.querySelector("#timestamp");
             var content = document.querySelector("#content");
             var reply_pic = document.querySelector("#reply_pic");
+            var reply_form = document.querySelector("#reply_form");
+            var r_url = "{% url 'comment' post_id=0 %}".replace("0", id);
+            reply_form.action = r_url;
             reply_pic.src = url;  
             username.innerHTML = u;
             timestamp.innerHTML = t + " ago";
