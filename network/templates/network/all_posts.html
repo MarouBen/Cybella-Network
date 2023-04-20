@@ -59,18 +59,23 @@
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
                 <div class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
-                <div class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
+                {% if user not in post.likes.all%}
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
+                {%else%}
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer text-rose-400"><i class="fa-solid fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
+                {%endif%}
                 <div class="flex hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i></div>
             </div>
         </div>
     {%endfor%}
     <script>
+        // function that will resize the textarea
         function resize(){
             var text = document.querySelector('textarea');
             text.style.height = "auto";
             text.style.height = text.scrollHeight + "px";
         }
-        
+        // function that will preview the images
         function previewImages(){
             const preview = document.querySelector('#images-container');
             const files = document.querySelector('input[type=file]').files;
@@ -87,6 +92,30 @@
                     });
                     reader.readAsDataURL(file);
                 });
+            }
+        }
+        // function that will like the post onclcik
+        function like(element, id){
+            //send a request to the server
+            fetch(`/like/${id}`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+            });
+
+            //get the heart of the div that called the function
+            const heart = element.querySelector('i');
+            //change the color of the heart of the div that called the function
+            element.classList.toggle("text-rose-400");
+            heart.classList.toggle("fa-regular");
+            heart.classList.toggle("fa-solid");
+            //get the number of likes
+            var likes = element.querySelector('span');
+            //change the number of likes
+            if(element.classList.contains("text-rose-400")){
+                likes.innerHTML = parseInt(likes.innerHTML) + 1;
+            }else{
+                likes.innerHTML = parseInt(likes.innerHTML) - 1;
             }
         }
     </script>

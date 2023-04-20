@@ -175,7 +175,7 @@ def like (request, post_id):
     # Get the post
     post = get_object_or_404(Post, id=post_id)
     # If the user has already liked the post, unlike it
-    if request.user in post.likes.all():
+    if not request.user in post.likes.all():
         post.add_like(request.user)
         return JsonResponse({"message": "Post liked successfully."}, status=201)
     # If the user has not liked the post, like it
