@@ -3,7 +3,7 @@
 
 {% block body %}
     <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
-        <form>
+        <form method="Post" action="{% url 'index' %}" enctype="multipart/form-data">
             {%csrf_token%}
 
             <div class="flex">
@@ -14,7 +14,7 @@
                 {%endif%}
                 
                 <div class="w-full text-xl">
-                    <textarea oninput="resize()" class="text-xl h-12 w-full p-2 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                    <textarea name="content" oninput="resize()" class="text-xl h-12 w-full p-2 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
                         placeholder="What's happening?"></textarea>
                     <div id="images-container" class=""></div>
                 </div>
@@ -25,7 +25,7 @@
                     <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
                     <input type="file" name="I" id="I" value="{{I}}" accept="image/*,jpg,jpeg,png" onchange="previewImages()" hidden/>
                 </label>
-                <button class="tweet w-[20%] px-1 py-2"> <span>Post</span></button>
+                <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Post</span></button>
             </div>
 
         </form>

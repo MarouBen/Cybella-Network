@@ -896,24 +896,16 @@ select {
   width: 100vw;
 }
 
+.max-w-2xl {
+  max-width: 42rem;
+}
+
 .max-w-\[31\%\] {
   max-width: 31%;
 }
 
 .max-w-xs {
   max-width: 20rem;
-}
-
-.max-w-xl {
-  max-width: 36rem;
-}
-
-.max-w-md {
-  max-width: 28rem;
-}
-
-.max-w-2xl {
-  max-width: 42rem;
 }
 
 .flex-grow {
@@ -1099,12 +1091,12 @@ select {
   line-height: 1;
 }
 
-.text-\[20px\] {
-  font-size: 20px;
+.text-\[13px\] {
+  font-size: 13px;
 }
 
-.text-\[8px\] {
-  font-size: 8px;
+.text-\[20px\] {
+  font-size: 20px;
 }
 
 .text-sm {
@@ -1115,27 +1107,6 @@ select {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
-}
-
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
-}
-
-.text-\[14px\] {
-  font-size: 14px;
-}
-
-.text-\[16px\] {
-  font-size: 16px;
-}
-
-.text-\[12px\] {
-  font-size: 12px;
-}
-
-.text-\[13px\] {
-  font-size: 13px;
 }
 
 .font-bold {

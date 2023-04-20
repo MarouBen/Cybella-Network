@@ -109,7 +109,7 @@ def register(request):
 def new_post(request):
     # If the user is submitting a new post
     if request.method == "POST":
-        content = request.POST["content"]
+        content = request.POST.get("content", "")
         user = request.user
         post = Post(user=user, content=content)
         post.save()
@@ -119,6 +119,14 @@ def new_post(request):
     
     
 def all_posts(request):
+    # If the user is submitting a new post
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            return new_post(request)
+        else: 
+            # redirect to login page
+            return HttpResponseRedirect(reverse("login"))
+            
     # Get all posts
     posts_list = Post.objects.order_by("-timestamp").all()
     # Paginate posts with 10 posts per page
