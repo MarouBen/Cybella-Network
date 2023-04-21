@@ -48,8 +48,10 @@
                             <i class="fa-solid fa-ellipsis-h text-gray-500 text-xl"></i>
                             <div id="optionsBox" class="absolute top-0 right-0 bg-gray-900 rounded-xl min-h-[80px] w-[300px] hidden z-50">
                                 <ul class="list-none font-semibold">
-                                    <li onclick="deleting({{post.id}})" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
-                                    <li class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
+                                    {% if request.user == post.user %}
+                                        <li onclick="deleting({{post.id}})" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
+                                        <li class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
+                                    {% endif %}
                                     <li class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-bookmark mr-4"></i>Bookmark</a></li>
                                 </ul>
                             </div>
