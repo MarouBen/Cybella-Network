@@ -24,7 +24,7 @@
             <div class="flex justify-between mt-2 ml-14">
                 <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2.5" alt="Media">
                     <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
-                    <input type="file" name="I" id="I" value="{{I}}" accept="image/*,jpg,jpeg,png" onchange="previewImages()" hidden/>
+                    <input type="file" name="I" id="I" accept="image/*,jpg,jpeg,png" onchange="previewImages('images-container','I')" hidden/>
                 </label>
                 <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Post</span></button>
             </div>
@@ -50,7 +50,7 @@
                                 <ul class="list-none font-semibold">
                                     {% if request.user == post.user %}
                                         <li onclick="deleting({{post.id}})" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
-                                        <li class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
+                                        <li onclick="editing({{post.id}})" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
                                     {% endif %}
                                     <li class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-bookmark mr-4"></i>Bookmark</a></li>
                                 </ul>
@@ -63,7 +63,6 @@
                             <img class="max-w-xs max-h-xs rounded" src="{{post.images.url}}" alt="post image"> 
                         </div> 
                     {%endif%}
-
                 </div>
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
@@ -81,6 +80,46 @@
                 {%endif%}
             </div>
         </div>
+        <!-- textarea Section -->
+        <form id="editPost{{post.id}}" class="w-full mx-auto bg-gray-800  p-2 text-white border-b border-gray-600 hidden">
+            {%csrf_token%}
+            <div class="flex">
+                <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
+                
+                <div class="w-full">
+                    <div class="flex justify-between">
+                        <div>
+                            <span class="font-bold">{{post.user|title}}</span>
+                            <span class="text-gray-500 text-[13px]">{{post.timestamp|timesince}} ago</span>
+                            <span class="text-gray-500 text-[13px]">•</span>
+                            <span class="text-gray-500 text-[13px]">Public</span>
+                        </div>
+                        <div class="relative hover:cursor-pointer text-gray-500">
+                            <i class="text-xs fa-solid fa-pen mr-3"></i> Editing
+                        </div>
+                    </div>
+                    <div class="text-md w-full pl-0 pt-0 p-0 bg-gray-800 ">
+                        <textarea name="content" oninput="resize(this)" class=" w-full p-0 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" >{{post.content}}</textarea>
+                    </div>
+                    
+                    
+                    <div id="images-container{{post.id}}" class="relative">
+                        {% if post.images %}
+                            <img class="max-w-xs max-h-xs rounded" src="{{post.images.url}}" alt="post image"> 
+                        {%endif%}
+                    </div> 
+                    
+                    <div class="flex justify-between">
+                        <label for="I{{post.id}}" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2.5" alt="Media">
+                            <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
+                            <input type="file" name="E_I" id="I{{post.id}}"  accept="image/*,jpg,jpeg,png" onchange="previewImages('images-container{{post.id}}','I{{post.id}}')" hidden/>
+                        </label>
+                        <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Edit</span></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
     {%endfor%}
 
     <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden">
@@ -184,10 +223,11 @@
             
         }
         // function that will preview the images
-        function previewImages() {
-            const preview = document.querySelector('#images-container');
-            const input = document.querySelector('#I');
-            const files = document.querySelector('#I').files;
+        function previewImages(id,image) {
+            console.log(id,image);
+            const preview = document.querySelector(`#${id}`);
+            const input = document.querySelector(`#${image}`);
+            const files = document.querySelector(`#${image}`).files;
             preview.innerHTML = "";
             if (files && files.length > 0) {
               const file = files[0]; // assuming only one file is selected
@@ -316,6 +356,13 @@
                   options.classList.add("hidden");
                 }
               });
+        }
+        // function to show the edit box
+        function editing(post_id){
+            const editBox = document.querySelector(`#editPost${post_id}`);
+            const post = document.querySelector(`#post${post_id}`);
+            editBox.classList.toggle("hidden");
+            post.classList.toggle("hidden");
         }
     </script>
 {% endblock %}
