@@ -44,8 +44,15 @@
                             <span class="text-gray-500 text-[13px]">•</span>
                             <span class="text-gray-500 text-[13px]">Public</span>
                         </div>
-                        <div>
+                        <div onclick="showOptions(this)"  class="relative hover:cursor-pointer">
                             <i class="fa-solid fa-ellipsis-h text-gray-500 text-xl"></i>
+                            <div id="optionsBox" class="absolute top-0 right-0 bg-gray-900 rounded-xl min-h-[80px] w-[300px] hidden z-50">
+                                <ul class="list-none font-semibold">
+                                    <li><a href="#" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
+                                    <li><a href="#" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
+                                    <li><a href="#" class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-bookmark mr-4"></i>Bookmark</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 ">{{post.content}}</div>
@@ -160,11 +167,11 @@
             commentBox.classList.add("hidden");
           }
           
-          // Close the comment box if the user clicks outside of it
+        // Close the comment box if the user clicks outside of it
         window.onclick = function(event) {
             var commentBox = document.getElementById("overlay");
             if (event.target == commentBox) {
-              commentBox.classList.add("hidden");
+                commentBox.classList.add("hidden");
             }
           }
 
@@ -268,6 +275,20 @@
             .catch(error => {
                 return alert("Please log in first");
             });
+        }
+        // function to show options
+        function showOptions(element){
+            //get the options of the div that called the function
+            const options = element.querySelector('#optionsBox');
+            //show the options
+            options.classList.toggle("hidden");
+            window.addEventListener('click', function(e) {
+                // check if clicked element is outside of the options box
+                if (!options.contains(e.target) && !element.contains(e.target)) {
+                  // hide the options box
+                  options.classList.add("hidden");
+                }
+              });
         }
     </script>
 {% endblock %}
