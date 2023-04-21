@@ -164,11 +164,13 @@ def edit_post(request, post_id):
     
     # If the user is submitting an edit
     if request.method == "POST":
-        data = json.loads(request.body)
-        content = data.get("content", "")
+        content = request.POST.get("content", "")
         post.content = content
+        image = request.FILES.get("E_I", None)
+        if  image != None:
+            post.images = request.FILES.get("E_I", None)
         post.save()
-        return JsonResponse({"message": "Post edited successfully."}, status=201)
+        return HttpResponseRedirect(reverse("index"))
         
     
 

@@ -89,6 +89,10 @@ class Post(models.Model):
         """ Return True if user reposted """
         return self.reposts.filter(user=user).exists()
     
+    def is_a_repost(self):
+        """ Return True if post is a repost """
+        return self.repost is not None and self.user != self.repost.user 
+    
     def __str__(self):
         return f"{self.user.username}'s post ({self.id})"
         
