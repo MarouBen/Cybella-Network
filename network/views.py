@@ -242,3 +242,17 @@ def delete(request, post_id):
         return JsonResponse({"message": "Post deleted successfully."}, status=201)
     else:
         return JsonResponse({"error": "You are not authorized to delete this post."}, status=402)
+    
+# function to bookmark a post
+def bookmark(request, post_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "You must be logged in to like a post."}, status=403)
+    # Get the post
+    post = get_object_or_404(Post, id=post_id)
+    user = request.user
+    if not post in user.bookmarks.all():
+        user.bookmarks.add(post)
+        return JsonResponse({"message": "Post bookmarked successfully."}, status=201)
+    else:
+        user.bookmarks.remove(post)
+        return JsonResponse({"message": "Post unbookmarked successfully."}, status=201)

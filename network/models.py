@@ -6,6 +6,7 @@ class User(AbstractUser):
     """ User model. also contain the profile picture. and it's followers and following. """
     picture = models.ImageField(upload_to="network/images/profile_pictures", blank=True, null=True,default="network/images/profile_pictures/default.png")
     followers = models.ManyToManyField("self", symmetrical=False, blank=True, related_name="following")
+    bookmarks = models.ManyToManyField("Post", blank=True, related_name="bookmarked_by")
     
     def follow(self, user):
         """ Add user to followers """

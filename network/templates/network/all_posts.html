@@ -54,7 +54,11 @@
                                             <li onclick="editing({{post.id}})" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
                                         {%endif%}
                                     {% endif %}
-                                    <li class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-bookmark mr-4"></i>Bookmark</a></li>
+                                    {% if post in user.bookmarks.all %}
+                                        <li onclick="bookmark({{post.id}})" class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-bookmark mr-4"></i>Bookmark</a></li>
+                                    {%else%}
+                                        <li onclick="bookmark({{post.id}})" class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-regular fa-bookmark mr-4"></i>Bookmark</a></li>
+                                    {%endif%}
                                 </ul>
                             </div>
                         </div>
@@ -365,6 +369,27 @@
             const post = document.querySelector(`#post${post_id}`);
             editBox.classList.toggle("hidden");
             post.classList.toggle("hidden");
+        }
+
+        //function to bookmatk the post
+        function bookmark(post_id){
+            fetch(`/bookmark/${post_id}`)
+            .then (response =>{
+                if (response.ok){
+                    // request succeded, handle the request
+                    return response.json();
+                }
+                else{
+                    // request failed, throw an Error
+                    throw new Error("Error");
+                }
+            })
+            .then(data =>{
+                alert(data.message);
+            })
+            .catch(error =>{
+                return alert(error.message);
+            });
         }
     </script>
 {% endblock %}
