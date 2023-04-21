@@ -171,7 +171,7 @@ def edit_post(request, post_id):
         return JsonResponse({"message": "Post edited successfully."}, status=201)
         
     
-@login_required
+
 def like (request, post_id):
     # Check if user is authenticated
     if not request.user.is_authenticated:
@@ -191,8 +191,6 @@ def like (request, post_id):
     
 @login_required
 def comment(request, post_id):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("login"))
     # Get the post
     post = get_object_or_404(Post, id=post_id)
     # If the user is submitting a comment
@@ -213,7 +211,6 @@ def comment(request, post_id):
     #     }) 
 
 # function to repost a post
-@login_required
 def repost(request, post_id):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "You must be logged in to like a post."}, status=403)
@@ -229,3 +226,17 @@ def repost(request, post_id):
         repost = Post(user=user, content=f"Reposted from {user.username}: {original_post.content}", images=original_post.images, repost=original_post)
         repost.save()
         return JsonResponse({"message": "Post reposted successfully."}, status=201)
+    
+# function to delete a post
+def delete(request, post_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "You must be logged."}, status=403)
+    # Get the post
+    post = get_object_or_404(Post, id=post_id)
+    user = request.user
+    # delete if the user is the owner of the post
+    if post.user == user:
+        post.delete()
+        return JsonResponse({"message": "Post deleted successfully."}, status=201)
+    else:
+        return JsonResponse({"error": "You are not authorized to delete this post."}, status=402)
