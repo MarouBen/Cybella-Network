@@ -60,6 +60,7 @@ class Post(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name="liked_posts")
     images = models.ImageField(upload_to="network/images/posts", blank=True, null=True)
     repost = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name="reposts")
+    parent_post = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name="comments")
 
     def serialize(self):
         return {
@@ -97,25 +98,3 @@ class Post(models.Model):
     def __str__(self):
         return f"{self.user.username}'s post ({self.id})"
         
-        
-        
-class Comment(models.Model):
-    """ Comments model. Each comment has a user, post, content, timestamp. """
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commenter")
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    content = models.CharField(max_length=500)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    images = models.ImageField(upload_to="network/images/comments", blank=True, null=True)
-    likes = models.ManyToManyField(User, blank=True, related_name="liked_comments")
-    
-    def serialize(self):
-        return {
-            "id": self.id,
-            "user": self.user.username,
-            "content": self.content,
-            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
-        }
-    
-    def __str__(self):
-        return f"{self.user.username}'s comment ({self.id})"

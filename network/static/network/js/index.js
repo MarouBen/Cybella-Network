@@ -36,7 +36,7 @@ function previewImages(id,image) {
             image.classList.add("max-w-xs", "max-h-xs");
             const removeButton = document.createElement("button");
             removeButton.innerText = "X";
-            removeButton.classList.add("absolute", "top-2", "left-2","px-2" ,"text-white", "bg-red-400", "rounded-full", "hover:bg-red-600", "focus:outline-none","transition", "duration-300", "ease-in-out", "transform", "hover:-translate-y-1", "hover:scale-110", "active:scale-95", "active:translate-y-0");
+            removeButton.classList.add("absolute", "top-1", "left-1","px-2" ,"text-white", "bg-red-400", "rounded-full", "hover:bg-red-600", "focus:outline-none","transition", "duration-300", "ease-in-out", "transform", "hover:-translate-y-1", "hover:scale-110", "active:scale-95", "active:translate-y-0");
             removeButton.onclick = function() {
                 preview.removeChild(image);
                 preview.removeChild(removeButton);

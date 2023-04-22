@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Post, Comment
+from .models import User, Post
 
 class UserAdmin(admin.ModelAdmin):
     # Customization for User model in admin site
@@ -18,6 +18,3 @@ admin.site.register(User, UserAdmin)
 
 # Register the Post model with custom admin class
 admin.site.register(Post, PostAdmin)
-
-# Register the comments model
-admin.site.register(Comment)

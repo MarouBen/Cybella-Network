@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block body %}
-<div class=" w-full backdrop-blur-md backdrop-filter h-24 bg-gray-800 sticky p-3 text-xl text-white font-bold border-b border-gray-600">
+<div class=" w-full backdrop-blur-md backdrop-filter h-24 bg-gray-800 sticky p-3 text-xl text-white font-bold border-b border-gray-600 ">
     Post
 </div>
 <div id="post{{post.id}}" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600 hover:cursor-pointer hover:bg-slate-800">
@@ -110,7 +110,7 @@
     
     <form method="Post" action="{% url 'comment' post_id=post.id %}" enctype="multipart/form-data">
         {%csrf_token%}
-        <div>@replying to {{post.user}}</div>
+        <div class="ml-[10%] text-gray-400"><i class="fa-solid fa-arrow-right mr-4"></i>Replying to {{post.user|title}}</div>
         <div class="flex">
             {%if user.is_authenticated %}
                 <img class="w-14 h-12 rounded-full mr-2" src="{{user.picture.url}}" alt="Profile Avatar">
@@ -128,21 +128,21 @@
         <div class="flex justify-between mt-2 ml-14">
             <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2.5" alt="Media">
                 <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
-                <input type="file" name="I" id="I" accept="image/*,jpg,jpeg,png" onchange="previewImages('images-container','I')" hidden/>
+                <input type="file" name="R_I" id="I" accept="image/*,jpg,jpeg,png" onchange="previewImages('images-container','I')" hidden/>
             </label>
             <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Reply</span></button>
         </div>
     </form>
 </div>
-{%for comment in comments%}
-        <div id="comment{{comment.id}}" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600 hover:cursor-pointer hover:bg-slate-800">
+{%for post in comments%}
+        <div id="post{{post.id}}" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600 hover:cursor-pointer hover:bg-slate-800">
             <div class="flex ">
-                <img class="w-14 h-12 rounded-full mr-2" src="{{comment.user.picture.url}}" alt="user Avatar">
+                <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
                 <div class="w-full">
                     <div class="flex justify-between">
                         <div>
-                            <span class="font-bold">{{comment.user|title}}</span>
-                            <span class="text-gray-500 text-[13px]">{{comment.timestamp|timesince}} ago</span>
+                            <span class="font-bold">{{post.user|title}}</span>
+                            <span class="text-gray-500 text-[13px]">{{post.timestamp|timesince}} ago</span>
                             <span class="text-gray-500 text-[13px]">•</span>
                             <span class="text-gray-500 text-[13px]">Public</span>
                         </div>
@@ -150,36 +150,101 @@
                             <i class="fa-solid fa-ellipsis-h text-xl text-gray-500  hover:text-blue-400"></i>
                             <div id="optionsBox" class="absolute top-0 right-0 bg-gray-900 rounded-xl w-[300px] hidden z-50">
                                 <ul class="list-none font-semibold">
-                                    {% if request.user == comment.user %}
-                                        <li onclick="" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
-                                        <li onclick="" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li> 
+                                    {% if request.user == post.user %}
+                                        <li onclick="deleting({{post.id}})" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
+                                        <li onclick="editing({{post.id}})" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li> 
                                     {% endif %}
                                     <li onclick="" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-flag mr-4"></i>Report</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="text-md w-full pl-0 pt-0 p-2  ">{{comment.content}}</div>
-                    {% if comment.images %}
+                    <div class="text-md w-full pl-0 pt-0 p-2  ">{{post.content}}</div>
+                    {% if post.images %}
                         <div id="images-container" class="">
-                            <img class="max-w-xs max-h-xs rounded" src="{{comment.images.url}}" alt="post image"> 
+                            <img class="max-w-xs max-h-xs rounded" src="{{post.images.url}}" alt="post image"> 
                         </div> 
                     {%endif%}
                 </div>
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
-                <div class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{comment.comments.count}}</span></div>
-                {% if user not in comment.likes.all%}
-                    <div id="like" onclick="like(this,{{comment.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{comment.likes.count}}</span></div>
+                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}','{{post.id}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
+                {% if user not in post.likes.all%}
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
                 {%else%}
-                    <div id="like" onclick="like(this,{{comment.id}})" class="flex hover:text-rose-400 hover:cursor-pointer text-rose-400"><i class="fa-solid fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{comment.likes.count}}</span></div>
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer text-rose-400"><i class="fa-solid fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
                 {%endif%} 
             </div>
         </div>
-
-    {%endfor%}
-<script>
+    {%endfor%} 
     
+     <!--Comment section popup-->
+     <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden">
+        <div id="commentbox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
+
+            <div onclick="closeCommentBox()" class="relative mb-8 inset-2 text-white text-xl hover:cursor-pointer"><i class="fa-solid fa-xmark"></i></div>
+            <div class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white">
+                <div class="flex">
+                    <img id="reply_pic" class="w-14 h-12 rounded-full mr-2" src="" alt="user Avatar">
+                    
+                    <div class="w-full">
+                        <div class="flex pt-1">
+                            <div>
+                                <span id="username" class="font-bold"></span>
+                                <span id="timestamp" class="text-gray-500 text-[13px]"></span>
+                                <span class="text-gray-500 text-[13px]">•</span>
+                                <span class="text-gray-500 text-[13px]">Public</span>
+                            </div>
+                        </div>
+                        <div id="content" class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 "></div>
+                        <div class=" text-gray-500 text-[14px] w-full pl-0 pt-0 p-2  ">Replying to <span></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full min-h-[185px] mx-auto bg-gray-800 p-2 text-white ">
+                <form id="reply_form" class="h-full" method="Post" action="" enctype="multipart/form-data">
+                    {%csrf_token%}
+
+                    <div class="flex">
+                        {%if user.is_authenticated %}
+                            <img class="w-14 h-12 rounded-full mr-2" src="{{user.picture.url}}" alt="Profile Avatar">
+                        {%else%}
+                            <img class="w-14 h-12 rounded-full mr-2" src="{% static 'network/Images/default.png' %}" alt="Profile Avatar">
+                        {%endif%}
+                        
+                        
+                        <div class="w-full text-xl">
+                            <textarea name="content" oninput="resize(this)"  class="text-xl h-28 w-full p-2 overflow-y-hidden bg-gray-800 resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                                placeholder="Post your reply"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-2 ml-14">
+                        <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Reply</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        <!--Comment section-->
+<script>
+    function openCommentBox(u,t,c,url,id) {
+        var username = document.querySelector("#username");
+        var timestamp = document.querySelector("#timestamp");
+        var content = document.querySelector("#content");
+        var reply_pic = document.querySelector("#reply_pic");
+        var reply_form = document.querySelector("#reply_form");
+        var r_url = "{% url 'comment' post_id=0 %}".replace("0", id);
+        reply_form.action = r_url;
+        reply_pic.src = url;  
+        username.innerHTML = u;
+        timestamp.innerHTML = t + " ago";
+        content.innerHTML = c;
+    
+        var commentBox = document.getElementById("overlay");
+        commentBox.classList.remove("hidden");
+    }
 </script>
 {% endblock %}
 

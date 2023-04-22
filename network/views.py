@@ -10,7 +10,7 @@ from django.views import View
 from django.shortcuts import render,get_object_or_404
 from django.urls import reverse,reverse_lazy
 
-from .models import User,Post,Comment
+from .models import User,Post
 
 @login_required
 class ProfileView(View):
@@ -129,7 +129,7 @@ def all_posts(request):
             return HttpResponseRedirect(reverse("login"))
             
     # Get all posts
-    posts_list = Post.objects.order_by("-timestamp").all()
+    posts_list = Post.objects.order_by("-timestamp").all().filter(parent_post=None)
     # Paginate posts with 10 posts per page
     paginator = Paginator(posts_list, 10)
     page = request.GET.get('page')
@@ -197,20 +197,15 @@ def comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     # If the user is submitting a comment
     if request.method == "POST":
-        content = request.POST.get("c", "")
+        content = request.POST.get("content", "")
+        images = request.FILES.get("R_I", None)
         user = request.user
-        comment = Comment(user=user, post=post, content=content)
-        comment.save()
-        #return HttpResponseRedirect(reverse("post", args=[post_id]))
-        return HttpResponseRedirect(reverse("index"))
         
-    # If the user is requesting the comments
-    # else:
-    #     comments = post.comments.all()
-    #     return render(request, "network/post.html", {
-    #         "comments": comments,
-    #         "post_id": post_id
-    #     }) 
+        # create comment
+        comment = Post(user=user, images=images, content=content, parent_post=post)
+        comment.save()
+        return HttpResponseRedirect(reverse("post", args=[post_id]))     
+        
 
 # function to repost a post
 def repost(request, post_id):
@@ -262,8 +257,8 @@ def view_post(request,post_id):
     #get the post
     post = get_object_or_404(Post, id=post_id)
     # get the comments
-    comments = post.comments.all()
+    comments = Post.objects.filter(parent_post=post).order_by("-timestamp").all()
     return render(request, "network/post.html", {
-        "post": post,
-        "comments": comments
-    })
+        "comments": comments,
+        "post": post
+    }) 

@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="flex justify-between mt-1 mx-20 text-gray-500">
-                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}','{{post.id}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.count}}</span></div>
+                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}','{{post.id}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.all.count}}</span></div>
                 {% if user not in post.likes.all%}
                     <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
                 {%else%}
@@ -165,7 +165,7 @@
                         {%endif%}
                         
                         <div class="w-full text-xl">
-                            <textarea name="c" oninput="resize(this)"  class="text-xl h-28 w-full p-2 overflow-y-hidden bg-gray-800 resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                            <textarea name="content" oninput="resize(this)"  class="text-xl h-28 w-full p-2 overflow-y-hidden bg-gray-800 resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
                                 placeholder="Post your reply"></textarea>
                         </div>
                     </div>
