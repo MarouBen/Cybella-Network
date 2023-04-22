@@ -106,6 +106,8 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     content = models.CharField(max_length=500)
     timestamp = models.DateTimeField(auto_now_add=True)
+    images = models.ImageField(upload_to="network/images/comments", blank=True, null=True)
+    likes = models.ManyToManyField(User, blank=True, related_name="liked_comments")
     
     def serialize(self):
         return {

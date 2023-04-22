@@ -258,5 +258,12 @@ def bookmark(request, post_id):
         return JsonResponse({"message": "Post unbookmarked successfully."}, status=201)
     
 # function to view a post
-def view_post(request):
-    return render(request, "network/post.html")
+def view_post(request,post_id):
+    #get the post
+    post = get_object_or_404(Post, id=post_id)
+    # get the comments
+    comments = post.comments.all()
+    return render(request, "network/post.html", {
+        "post": post,
+        "comments": comments
+    })

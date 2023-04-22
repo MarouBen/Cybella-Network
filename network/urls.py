@@ -15,5 +15,5 @@ urlpatterns = [
     path("delete/<int:post_id>",views.delete, name="delete"),
     path("edit/<int:post_id>",views.edit_post, name="edit"),
     path("bookmark/<int:post_id>",views.bookmark, name="bookmark"),
-    path("post",views.view_post, name="post"),
+    path("post/<int:post_id>",views.view_post, name="post"),
 ]
