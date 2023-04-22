@@ -1,0 +1,75 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block body %}
+    <div class=" w-full backdrop-blur-md backdrop-filter h-24 bg-gray-800 sticky p-3 text-xl text-white font-bold border-b border-gray-600">
+        Bookmarks
+    </div>
+    {%for post in posts%}
+        <div id="post{{post.id}}" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600 hover:cursor-pointer hover:bg-slate-800">
+            <div onclick="window.location.href='{% url 'post' post_id=post.id %}'" class="flex ">
+                <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
+                <div class="w-full">
+                    <div class="flex justify-between">
+                        <div>
+                            <span class="font-bold">{{post.user|title}}</span>
+                            <span class="text-gray-500 text-[13px]">{{post.timestamp|timesince}} ago</span>
+                            <span class="text-gray-500 text-[13px]">•</span>
+                            <span class="text-gray-500 text-[13px]">Public</span>
+                        </div>
+                        <div onclick="event.stopPropagation(); showOptions(this)"  class="relative hover:cursor-pointer rounded-full hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1">
+                            <i class="fa-solid fa-ellipsis-h text-xl text-gray-500  hover:text-blue-400"></i>
+                            <div id="optionsBox" class="absolute top-0 right-0 bg-gray-900 rounded-xl w-[300px] hidden z-50">
+                                <ul class="list-none font-semibold">
+                                    {% if request.user == post.user %}
+                                        <li onclick="deleting({{post.id}})" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
+                                        {% if not post|is_repost%}
+                                            <li onclick="editing({{post.id}})" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
+                                        {%endif%}
+                                    {% endif %}
+                                    {% if post in user.bookmarks.all %}
+                                        <li onclick="bookmark(this,{{post.id}});location.reload();" class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-bookmark mr-4"></i>Bookmark</a></li>
+                                    {%else%}
+                                        <li onclick="bookmark(this,{{post.id}});location.reload();" class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-regular fa-bookmark mr-4"></i>Bookmark</a></li>
+                                    {%endif%}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-md w-full pl-0 pt-0 p-2  ">{{post.content}}</div>
+                    {% if post.images %}
+                        <div id="images-container" class="">
+                            <img class="max-w-xs max-h-xs rounded" src="{{post.images.url}}" alt="post image"> 
+                        </div> 
+                    {%endif%}
+                </div>
+            </div>
+            <div class="flex justify-between mt-1 mx-20 text-gray-500">
+                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}','{{post.id}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.all.count}}</span></div>
+                {% if user not in post.likes.all%}
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
+                {%else%}
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer text-rose-400"><i class="fa-solid fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
+                {%endif%}
+
+                {% if not user.is_authenticated or not post|is_reposted_by_user:user%}
+                    <div id="repost" onclick="repost(this,{{post.id}})" class="flex hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.reposts.count}}</span></div>
+                {%else%}
+                    <div id="repost" onclick="repost(this,{{post.id}})" class="flex text-emerald-500 hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.reposts.count}}</span></div>
+                {%endif%}
+            </div>
+        </div>
+
+
+    {%endfor%}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/js/index.js' %}" defer></script>
+{% endblock %}
+
+{% block footer %}
+    footer
+{% endblock %}

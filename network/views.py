@@ -262,3 +262,11 @@ def view_post(request,post_id):
         "comments": comments,
         "post": post
     }) 
+
+# function to view bookmarks
+def view_bookmarks(request):
+    # get the bookmarks
+    bookmarks = request.user.bookmarks.all()
+    return render(request, "network/bookmark.html", {
+        "posts": bookmarks
+    })

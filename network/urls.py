@@ -16,4 +16,5 @@ urlpatterns = [
     path("edit/<int:post_id>",views.edit_post, name="edit"),
     path("bookmark/<int:post_id>",views.bookmark, name="bookmark"),
     path("post/<int:post_id>",views.view_post, name="post"),
+    path("bookmark",views.view_bookmarks, name="bookmark"),
 ]
