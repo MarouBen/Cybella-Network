@@ -1,9 +1,10 @@
-
 from django.urls import path
+from django.contrib import admin
 
 from . import views
 
 urlpatterns = [
+    path("admin", admin.site.urls),
     path("", views.all_posts, name="index"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
@@ -14,4 +15,5 @@ urlpatterns = [
     path("delete/<int:post_id>",views.delete, name="delete"),
     path("edit/<int:post_id>",views.edit_post, name="edit"),
     path("bookmark/<int:post_id>",views.bookmark, name="bookmark"),
+    path("post",views.view_post, name="post"),
 ]

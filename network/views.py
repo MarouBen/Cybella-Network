@@ -256,3 +256,7 @@ def bookmark(request, post_id):
     else:
         user.bookmarks.remove(post)
         return JsonResponse({"message": "Post unbookmarked successfully."}, status=201)
+    
+# function to view a post
+def view_post(request):
+    return render(request, "network/post.html")
