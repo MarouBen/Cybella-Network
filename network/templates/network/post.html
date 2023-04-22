@@ -22,7 +22,7 @@
                     <div id="optionsBox" class="absolute top-0 right-0 bg-gray-900 rounded-xl w-[300px] hidden z-50">
                         <ul class="list-none font-semibold">
                             {% if request.user == post.user %}
-                                <li onclick="deleting({{post.id}})" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
+                                <li onclick="deleting({{post.id}});setTimeout(()=>{window.location.href='{% url 'index'%}';},100)" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
                                 {% if not post|is_repost%}
                                     <li onclick="editing({{post.id}})" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
                                 {%endif%}
@@ -136,7 +136,7 @@
 </div>
 {%for post in comments%}
         <div id="post{{post.id}}" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600 hover:cursor-pointer hover:bg-slate-800">
-            <div class="flex ">
+            <div  onclick="window.location.href='{% url 'post' post_id=post.id %}'" class="flex ">
                 <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
                 <div class="w-full">
                     <div class="flex justify-between">
@@ -177,7 +177,7 @@
             </div>
         </div>
     {%endfor%} 
-    
+
      <!--Comment section popup-->
      <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden">
         <div id="commentbox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
@@ -225,6 +225,7 @@
                     </div>
                 </form>
             </div>
+            
         </div>
     </div>
         <!--Comment section-->
