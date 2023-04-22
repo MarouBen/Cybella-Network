@@ -3,6 +3,9 @@
 {% load custom_filters %}
 
 {% block body %}
+    <div class=" w-full backdrop-blur-md backdrop-filter h-24 bg-gray-800 sticky p-3 text-xl text-white font-bold border-b border-gray-600">
+        Home
+    </div>
     <div class="w-full  mx-auto bg-gray-800 p-2 text-white border-b border-gray-600 ">
         <form method="Post" action="{% url 'index' %}" enctype="multipart/form-data">
             {%csrf_token%}
