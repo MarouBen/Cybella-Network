@@ -269,3 +269,16 @@ def view_bookmarks(request):
     return render(request, "network/bookmark.html", {
         "posts": bookmarks
     })
+    
+# function that show post from following users
+@login_required
+def following(request):
+    user = request.user
+    # get the posts from following users
+    posts = Post.objects.filter(user__in=user.following.all()).order_by("-timestamp").all()
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
+    return render(request, "network/following.html", {
+        "posts" : posts
+    })
