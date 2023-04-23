@@ -20,7 +20,6 @@ function resize(element){
 }
 // function that will preview the images
 function previewImages(id,image) {
-    console.log(id,image);
     const preview = document.querySelector(`#${id}`);
     const input = document.querySelector(`#${image}`);
     const files = document.querySelector(`#${image}`).files;
@@ -33,7 +32,7 @@ function previewImages(id,image) {
             const image = new Image();
             image.title = file.name;
             image.src = event.target.result;
-            image.classList.add("max-w-xs", "max-h-xs");
+            image.classList.add("max-w-xs", "max-h-xs", "shadow-lg");
             const removeButton = document.createElement("button");
             removeButton.innerText = "X";
             removeButton.classList.add("absolute", "top-1", "left-1","px-2" ,"text-white", "bg-red-400", "rounded-full", "hover:bg-red-600", "focus:outline-none","transition", "duration-300", "ease-in-out", "transform", "hover:-translate-y-1", "hover:scale-110", "active:scale-95", "active:translate-y-0");
@@ -222,4 +221,10 @@ function follow(element, username){
     .catch(error => {
         return alert("Please log in first");
     });
+}
+
+// function to edit profile
+function edit_profile(){
+    const editBox = document.querySelector('#editProfile');
+    editBox.classList.toggle("hidden");
 }

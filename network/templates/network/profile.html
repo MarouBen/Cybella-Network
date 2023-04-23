@@ -18,7 +18,7 @@
     </div>
     <div class="text-lg flex">
         {% if request.user == TheUser %}
-            <button class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"> <span>Edit</span></button>
+            <button onclick="edit_profile(this)" class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"> <span>Edit</span></button>
         {% else %}
             {% if request.user in TheUser.followers.all %}
                 <button onclick="follow(this,'{{TheUser.username}}')" class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"><span><i class="fa-solid fa-circle-xmark mr-2"></i> Unfollow</span></button>
@@ -145,6 +145,68 @@
         </div>
     </div>
 
+    <!-- edit overlay-->
+     <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 ">
+        <div id="editBox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
+
+            <div class="relative inset-2 text-white text-xl  flex">
+                <i onclick="closeCommentBox()"  class="fa-solid fa-xmark hover:cursor-pointer"></i>
+            </div>
+
+
+            <div class="flex">
+                <label for="I" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-opacity-10 " alt="Media">
+                    <div id="E_images-container" class="rounded-full mr-2 border  border-gray-600 overflow-hidden" style="width: 300px; height: 300px;">
+                        <img class="" src="{{TheUser.picture.url}}" alt="user Avatar">
+                    </div>
+                    <input type="file" name="I" id="I" accept="image/*,jpg,jpeg,png" onchange="previewpdp(this,'E_images-container')" hidden/>
+                </label>
+                <div class="mt-6 w-full mr-4">
+                    <label for="small-input" class="block mb-2 text-sm font-medium text-gray-100 ">Username</label>
+                    <input value="{{user}}" type="text" id="small-input" class="block w-full p-2 text-gray-100 border border-gray-600 rounded-lg bg-gray-800 sm:text-xs focus:ring-blue-500 focus:border-blue-500">
+
+                    <label for="input-group-1" class="block mt-2 mb-2 text-sm font-medium text-gray-100 ">Email</label>
+                    <div class=" mb-6">
+                        <input value="{{user.email}}" type="text" id="input-group-1" class="bg-gray-800 border border-gray-600 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 " placeholder="name@cybella.com">
+                    </div>
+                    <label for="small-input" class="block mt-2 mb-2 text-sm font-medium text-gray-100 ">Bio</label>
+                    <textarea oninput="resize(this)" value=""  id="small-input" class="resize-none block w-full p-2  text-gray-100 border border-gray-600 rounded-lg bg-gray-800 sm:text-xs focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                
+            </div>
+          
+
+            <div class="flex justify-end mt-2 ml-14">
+                <button class="tweet w-[20%] px-1 py-2 " type="submit"> <span>save</span></button>
+            </div>
+        </div>
+    </div>
+    <!-- edit overlay-->
+    <script>
+        // function that will preview the images
+function previewpdp(input,container) {
+    const preview = document.querySelector(`#${container}`);
+    const files = input.files;
+    preview.innerHTML = "";
+
+    if (files && files.length > 0) {
+        const file = files[0]; // assuming only one file is selected
+        if (file.type.match(/^image\//)) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const image = new Image();
+            image.title = file.name;
+            image.src = event.target.result;
+            image.classList.add("w-[300px]", "h-[300px]", "shadow-lg", "object-fill", "overflow-hidden", "object-center");
+            preview.appendChild(image);
+        };
+        reader.readAsDataURL(file);
+        } else {
+        alert("Please select a valid image file.");
+        }
+    }
+}
+    </script>
 {% endblock %}
 
 {% block script %}
