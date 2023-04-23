@@ -198,3 +198,28 @@ function adjustBookmark(element){
 function reply(){
     document.getElementById('reply_area').focus();
 }
+
+// function to follow the user
+function follow(element, username){
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    fetch(`/profile/${username}`,{
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Request succeeded, handle the response
+            response.json();
+            window.location.reload();
+        } 
+        else {
+        // Request failed, throw an error
+        throw new Error("Error");
+        }
+    })
+    .catch(error => {
+        return alert("Please log in first");
+    });
+}

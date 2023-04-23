@@ -9,32 +9,21 @@ class User(AbstractUser):
     bookmarks = models.ManyToManyField("Post", blank=True, related_name="bookmarked_by")
     
     def follow(self, user):
-        """ Add user to followers """
-        self.followers.add(user)
+        """ Follow the given user """
+        self.following.add(user)
     
     def unfollow(self, user):
-        """ Remove user from followers """
-        self.followers.remove(user)
-    
+        """ Unflow the given user """
+        self.following.remove(user)
+        
     def is_following(self, user):
-        """ Return True if user is following """
-        return self.followers.filter(id=user.id).exists()
+        """ Check if the current user is following the given user """
+        return self.following.filter(pk=user.pk).exists()
+    
     
     def get_followers(self):
         """ Return all followers """
         return self.followers.all()
-    
-    def get_following(self):
-        """ Return all following """
-        return self.following.all()
-    
-    def number_followers(self):
-        """ Return number of followers """
-        return self.followers.count()
-    
-    def number_following(self):
-        """ Return number of following """
-        return self.following.count()
     
     def serialize(self):
         return {
@@ -54,7 +43,7 @@ class User(AbstractUser):
 class Post(models.Model):
     """ Post model. Each post has a user, content, timestamp, likes and images. """
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     content = models.CharField(max_length=500)
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, blank=True, related_name="liked_posts")

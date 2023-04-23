@@ -1,0 +1,152 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block body %}
+<div class="flex w-full backdrop-blur-md backdrop-filter min-h-24 bg-gray-800 sticky pt-7 p-3 text-xl text-white font-bold border-b border-gray-600 justify-between ">
+    <div class="flex ">
+        <div class="flex">
+            <img class="w-32 h-32 rounded-full mr-2" src="{{TheUser.picture.url}}" alt="user Avatar">
+        </div>
+        <div class="inline mt-4">
+            <span>{{TheUser.username|title}}</span><br>
+            <span class="text-lg font-normal text-gray-600">{{posts|length}} Posts</span><br>
+            <span class="text-lg font-semibold text-gray-400">{{TheUser.followers.all.count}} Followers •</span>
+            <span class="text-lg font-semibold text-gray-400">{{TheUser.following.all.count}} Following</span>
+
+        </div>
+    </div>
+    <div class="text-lg flex">
+        {% if request.user == TheUser %}
+            <button class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"> <span>Edit</span></button>
+        {% else %}
+            {% if request.user in TheUser.followers.all %}
+                <button onclick="follow(this,'{{TheUser.username}}')" class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"><span><i class="fa-solid fa-circle-xmark mr-2"></i> Unfollow</span></button>
+            {% else %}
+                <button onclick="follow(this,'{{TheUser.username}}')" class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"><span><i class="fa-solid fa-plus mr-2"></i> Follow</span></button>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+<div class=" flex justify-around w-full min-h-24 sticky p-3 text-xl text-white font-bold border-b border-gray-600">
+    <div class="w-full text-center border-r border-gray-600 hover:cursor-pointer">
+        Posts
+    </div>
+    <div class="w-full text-center  hover:cursor-pointer ">
+        Replys
+    </div>
+</div>
+{%for post in posts%}
+        <div id="post{{post.id}}" class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white border-b border-gray-600 hover:cursor-pointer hover:bg-slate-800">
+            <div onclick="window.location.href='{% url 'post' post_id=post.id %}'" class="flex ">
+                <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
+                <div class="w-full">
+                    <div class="flex justify-between">
+                        <div>
+                            <span class="font-bold">{{post.user|title}}</span>
+                            <span class="text-gray-500 text-[13px]">{{post.timestamp|timesince}} ago</span>
+                            <span class="text-gray-500 text-[13px]">•</span>
+                            <span class="text-gray-500 text-[13px]">Public</span>
+                        </div>
+                        <div onclick="event.stopPropagation(); showOptions(this)"  class="relative hover:cursor-pointer rounded-full hover:bg-blue-600 hover:bg-opacity-20 px-2 py-1">
+                            <i class="fa-solid fa-ellipsis-h text-xl text-gray-500  hover:text-blue-400"></i>
+                            <div id="optionsBox" class="absolute top-0 right-0 bg-gray-900 rounded-xl w-[300px] hidden z-50">
+                                <ul class="list-none font-semibold">
+                                    {% if request.user == post.user %}
+                                        <li onclick="deleting({{post.id}})" class="block px-4 py-2 rounded-t-xl font-bold text-red-600 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-trash mr-4"></i>Delete</a></li>
+                                        {% if not post|is_repost%}
+                                            <li onclick="editing({{post.id}})" class="block px-4 py-2 text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-pen mr-4"></i>Edit</a></li>
+                                        {%endif%}
+                                    {% endif %}
+                                    {% if post in user.bookmarks.all %}
+                                        <li onclick="bookmark(this,{{post.id}})" class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-solid fa-bookmark mr-4"></i>Bookmark</a></li>
+                                    {%else%}
+                                        <li onclick="bookmark(this,{{post.id}})" class="block px-4 py-2 rounded-b-xl text-gray-100 hover:bg-gray-700 hover:bg-opacity-20"><i class="fa-regular fa-bookmark mr-4"></i>Bookmark</a></li>
+                                    {%endif%}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-md w-full pl-0 pt-0 p-2  ">{{post.content}}</div>
+                    {% if post.images %}
+                        <div id="images-container" class="">
+                            <img class="max-w-xs max-h-xs rounded" src="{{post.images.url}}" alt="post image"> 
+                        </div> 
+                    {%endif%}
+                </div>
+            </div>
+            <div class="flex justify-between mt-1 mx-20 text-gray-500">
+                <div onclick="openCommentBox('{{post.user|title}}','{{post.timestamp|timesince}}','{{post.content}}','{{post.user.picture.url}}','{{post.id}}')" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-comment-dots text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.comments.all.count}}</span></div>
+                {% if user not in post.likes.all%}
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer"><i class="fa-regular fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
+                {%else%}
+                    <div id="like" onclick="like(this,{{post.id}})" class="flex hover:text-rose-400 hover:cursor-pointer text-rose-400"><i class="fa-solid fa-heart text-xl rounded-full hover:bg-rose-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.likes.count}}</span></div>
+                {%endif%}
+
+                {% if not user.is_authenticated or not post|is_reposted_by_user:user%}
+                    <div id="repost" onclick="repost(this,{{post.id}})" class="flex hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.reposts.count}}</span></div>
+                {%else%}
+                    <div id="repost" onclick="repost(this,{{post.id}})" class="flex text-emerald-500 hover:text-emerald-500 hover:cursor-pointer"><i class="fa-solid fa-retweet text-xl rounded-full hover:bg-emerald-500 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.reposts.count}}</span></div>
+                {%endif%}
+            </div>
+        </div>
+        <!-- textarea Section -->
+        <form id="editPost{{post.id}}" method="POST" action="{% url 'edit' post_id=post.id %}" enctype="multipart/form-data" class="w-full mx-auto bg-gray-800  p-2 text-white border-b border-gray-600 hidden">
+            {%csrf_token%}
+            <div class="flex">
+                <img class="w-14 h-12 rounded-full mr-2" src="{{post.user.picture.url}}" alt="user Avatar">
+                
+                <div class="w-full">
+                    <div class="flex justify-between">
+                        <div>
+                            <span class="font-bold">{{post.user|title}}</span>
+                            <span class="text-gray-500 text-[13px]">{{post.timestamp|timesince}} ago</span>
+                            <span class="text-gray-500 text-[13px]">•</span>
+                            <span class="text-gray-500 text-[13px]">Public</span>
+                        </div>
+                        <div class="relative hover:cursor-pointer text-gray-500">
+                            <i class="text-xs fa-solid fa-pen mr-3"></i> Editing
+                        </div>
+                    </div>
+                    <div class="text-md w-full pl-0 pt-0 p-0 bg-gray-800 ">
+                        <textarea name="content" oninput="resize(this)" class=" w-full p-0 bg-gray-800 overflow-y-hidden resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" >{{post.content}}</textarea>
+                    </div>
+                    
+                    
+                    <div id="images-container{{post.id}}" class="relative ">
+                        {% if post.images %}
+                            <img class="max-w-xs max-h-xs rounded" src="{{post.images.url}}" alt="post image"> 
+                        {%endif%}
+                    </div> 
+                    
+                    <div class="flex justify-between">
+                        <label for="I{{post.id}}" class=" flex items-center hover:cursor-pointer rounded-full hover:bg-sky-400 hover:bg-opacity-10 px-2.5" alt="Media">
+                            <i class="fa-solid fa-image text-[20px] text-sky-500"></i>
+                            <input type="file" name="E_I" id="I{{post.id}}"  accept="image/*,jpg,jpeg,png" onchange="previewImages('images-container{{post.id}}','I{{post.id}}')" hidden/>
+                        </label>
+                        <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Edit</span></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    {%endfor%}
+    <div class="w-full mx-auto bg-gray-800 p-2 text-white border-b border-gray-600">
+        <div class="flex justify-center">
+            <div class="flex">
+                {% if posts.has_previous %}
+                    <a href="?page={{ posts.previous_page_number }}" class="text-gray-500 text-xl hover:text-blue-400 hover:cursor-pointer">Previous</a>
+                {% endif %}
+                <span class="text-gray-500 text-xl mx-2">Page {{ posts.number }} of {{ posts.paginator.num_pages }}</span>
+                {% if posts.has_next %}
+                    <a href="?page={{ posts.next_page_number }}" class="text-gray-500 text-xl hover:text-blue-400 hover:cursor-pointer">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/js/index.js' %}"></script>
+{% endblock %}

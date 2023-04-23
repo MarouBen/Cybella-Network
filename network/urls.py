@@ -17,4 +17,5 @@ urlpatterns = [
     path("bookmark/<int:post_id>",views.bookmark, name="bookmark"),
     path("post/<int:post_id>",views.view_post, name="post"),
     path("bookmark",views.view_bookmarks, name="bookmark"),
+    path("profile/<str:username>",views.ProfileView.as_view(), name="profile"),
 ]

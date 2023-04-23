@@ -1,7 +1,8 @@
 import json
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required 
+from django.utils.decorators import method_decorator
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.http import JsonResponse
@@ -13,20 +14,20 @@ from django.urls import reverse,reverse_lazy
 
 from .models import User,Post
 
-@login_required
+@method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     # Get a users's profile
     def get(self, request, username):
         try:
             user = User.objects.get(username=username)
-            posts = Post.objects.filter(user=user).order_by("timestamp").all()
+            posts = Post.objects.filter(user=user).order_by("-timestamp").all().filter(parent_post=None)
             picture = user.picture.url
             # Paginate posts with 10 posts per page
             paginator = Paginator(posts, 10)
             page = request.GET.get('page')
             posts = paginator.get_page(page)
             return render(request, "network/profile.html", {
-                "user": user,
+                "TheUser": user,
                 "posts": posts,
                 "picture": picture
             })
@@ -36,23 +37,21 @@ class ProfileView(View):
                 "error": "User does not exist."
             })
             
+    # Follow or unfollow a user  
     def post(self, request, username):
         try:
-            user = User.objects.get(username=username)
-            # If the user is trying to follow or unfollow
-            # Follow a user
-            if request.POST["follow"] == "follow":
-                request.user.follow(user)
-                return HttpResponseRedirect(reverse_lazy("profile", args=[username]))
-            # Unfollow a user
-            elif request.POST["follow"] == "unfollow":
+            user = User.objects.get(username=username)  
+            # Check if user already follows
+            if request.user.is_following(user):
                 request.user.unfollow(user)
-                return HttpResponseRedirect(reverse_lazy("profile", args=[username]))
+                return JsonResponse({'success': True, 'message': 'Unfollowed successfully.'})
+            
+            else :
+                request.user.follow(user)
+                return JsonResponse({'success': True, 'message': 'Followed successfully.'})
         except User.DoesNotExist:
             # Handle user not found error
-            return render(request, "network/error.html", {
-                "error": "User does not exist."
-            })
+            return JsonResponse({'Error': False, 'message': 'User Not Found.'})
             
 
 def login_view(request):
