@@ -36,3 +36,9 @@
 ::-webkit-scrollbar {
     display: none;
   }
+
+#pr:hover{
+    background-color: #2D3748;
+    
+}
+

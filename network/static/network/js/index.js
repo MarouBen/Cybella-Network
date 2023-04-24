@@ -228,3 +228,16 @@ function edit_profile(){
     const editBox = document.querySelector('.edit_overlay');
     editBox.classList.toggle("hidden");
 }
+
+function showreplies(){
+    const replies = document.querySelector("#replies");
+    const posts = document.querySelector("#posts");
+    replies.classList.remove("hidden");
+    posts.classList.add("hidden");
+}
+function showposts(){
+    const replies = document.querySelector("#replies");
+    const posts = document.querySelector("#posts");
+    replies.classList.add("hidden");
+    posts.classList.remove("hidden");
+}

@@ -22,6 +22,7 @@ class ProfileView(View):
         try:
             user = User.objects.get(username=username)
             posts = Post.objects.filter(user=user).order_by("-timestamp").all().filter(parent_post=None)
+            replys = Post.objects.filter(user=user).order_by("-timestamp").all().exclude(parent_post=None)
             picture = user.picture.url
             # Paginate posts with 10 posts per page
             paginator = Paginator(posts, 10)
@@ -30,6 +31,7 @@ class ProfileView(View):
             return render(request, "network/profile.html", {
                 "TheUser": user,
                 "posts": posts,
+                "replys": replys,
                 "picture": picture
             })
         except User.DoesNotExist:
