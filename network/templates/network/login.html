@@ -1,11 +1,20 @@
-{% extends "network/layout.html" %}
 {% load static %}
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'network/css/login.css' %}">
-{% endblock %}
+{% load static tailwind_tags %}
 
-{% block body %}
-    <div class="boy w-full h-full bg-gray-200 flex flex-col">
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cybella login</title>
+        {% tailwind_css %}
+        <link rel ="stylesheet" href="{% static 'network/css/login.css' %}">
+        <script src="https://kit.fontawesome.com/d61c00eed6.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{% static 'network/js/login.js' %}" defer></script>
+    </head>
+
+
+ <body >
+    <div class="boy w-full h-full flex flex-col">
         <!-- Container -->
         <div class="log-container">
             <!-- Overlay -->
@@ -68,5 +77,4 @@
         <!-- Container -->
         
     </div>
-    <script src="{% static 'network/js/login.js' %}"></script>
-{% endblock %}
+</body>
