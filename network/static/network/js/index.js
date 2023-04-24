@@ -225,6 +225,6 @@ function follow(element, username){
 
 // function to edit profile
 function edit_profile(){
-    const editBox = document.querySelector('#editProfile');
+    const editBox = document.querySelector('.edit_overlay');
     editBox.classList.toggle("hidden");
 }

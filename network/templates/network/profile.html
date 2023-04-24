@@ -3,31 +3,38 @@
 {% load custom_filters %}
 
 {% block body %}
-<div class="flex w-full backdrop-blur-md backdrop-filter min-h-24 bg-gray-800 sticky pt-7 p-3 text-xl text-white font-bold border-b border-gray-600 justify-between ">
+<div class=" w-full backdrop-blur-md backdrop-filter min-h-24 bg-gray-800 sticky pt-7 p-3 text-xl text-white font-bold border-b border-gray-600 justify-between ">
+    <div>
     <div class="flex ">
         <div class="flex">
             <img class="w-32 h-32 rounded-full mr-2" src="{{TheUser.picture.url}}" alt="user Avatar">
         </div>
+        
         <div class="inline mt-4">
             <span>{{TheUser.username|title}}</span><br>
             <span class="text-lg font-normal text-gray-600">{{posts|length}} Posts</span><br>
-            <span class="text-lg font-semibold text-gray-400">{{TheUser.followers.all.count}} Followers •</span>
-            <span class="text-lg font-semibold text-gray-400">{{TheUser.following.all.count}} Following</span>
-
-        </div>
+            <span class="text-lg font-semibold text-gray-400"><span class="text-gray-300 font-bold">{{TheUser.followers.all.count}}</span> Followers •</span>
+            <span class="text-lg font-semibold text-gray-400"><span class="text-gray-300 font-bold">{{TheUser.following.all.count}}</span> Following</span>
+        </div>  
     </div>
-    <div class="text-lg flex">
+
+    <div class="text-lg flex ml-[78%]">
         {% if request.user == TheUser %}
-            <button onclick="edit_profile(this)" class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"> <span>Edit</span></button>
+            <button onclick="edit_profile(this)" class="tweet w-[150px]  px-1 py-2" type="submit"> <span><i class="fa-solid fa-pen mr-2 text-[15px]"></i>Edit</span></button>
         {% else %}
             {% if request.user in TheUser.followers.all %}
-                <button onclick="follow(this,'{{TheUser.username}}')" class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"><span><i class="fa-solid fa-circle-xmark mr-2"></i> Unfollow</span></button>
+                <button onclick="follow(this,'{{TheUser.username}}')" class="tweet w-[150px] px-1 py-2" type="submit"><span><i class="fa-solid fa-circle-xmark mr-2"></i> Unfollow</span></button>
             {% else %}
-                <button onclick="follow(this,'{{TheUser.username}}')" class="tweet w-[150px] mt-[70%] px-1 py-2" type="submit"><span><i class="fa-solid fa-plus mr-2"></i> Follow</span></button>
+                <button onclick="follow(this,'{{TheUser.username}}')" class="tweet w-[150px] px-1 py-2" type="submit"><span><i class="fa-solid fa-plus mr-2"></i> Follow</span></button>
             {% endif %}
         {% endif %}
     </div>
+    </div>
+    <div id="bio" class="inline">
+        <span class="text-lg font-medium text-gray-300">{{TheUser.bio}}</span> 
+    </div>
 </div>
+
 <div class=" flex justify-around w-full min-h-24 sticky p-3 text-xl text-white font-bold border-b border-gray-600">
     <div class="w-full text-center border-r border-gray-600 hover:cursor-pointer">
         Posts
@@ -146,7 +153,7 @@
     </div>
 
     <!-- edit overlay-->
-     <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 ">
+     <div id="overlay" class="edit_overlay fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden">
         <form method="POST" action="{%url 'edit_profile' username=TheUser.username %}" id="editBox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 " enctype="multipart/form-data">
             {%csrf_token%}
             <div class="relative inset-2 text-white text-xl  flex">
