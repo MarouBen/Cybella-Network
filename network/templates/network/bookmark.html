@@ -60,7 +60,24 @@
                 {%endif%}
             </div>
         </div>
-
+        <script>
+            function openCommentBox(u,t,c,url,id) {
+                var username = document.querySelector("#username");
+                var timestamp = document.querySelector("#timestamp");
+                var content = document.querySelector("#content");
+                var reply_pic = document.querySelector("#reply_pic");
+                var reply_form = document.querySelector("#reply_form");
+                var r_url = "{% url 'comment' post_id=0 %}".replace("0", id);
+                reply_form.action = r_url;
+                reply_pic.src = url;  
+                username.innerHTML = u;
+                timestamp.innerHTML = t + " ago";
+                content.innerHTML = c;
+            
+                var commentBox = document.getElementById("overlay");
+                commentBox.classList.remove("hidden");
+            }
+        </script>
 
     {%endfor%}
 

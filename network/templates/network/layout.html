@@ -53,15 +53,66 @@
         </nav>
         <!-- Sidebar -->
         <div class="body h-screen flex flex-row w-[69%] ml-[31%] ">
-            <div class="bg-gray-800 min-w-[50%]  relative border-x border-gray-600 max-w-2xl overflow-y-scroll" style="flex-grow:2;">
-                
+            <div class="bg-gray-800  relative border-x border-gray-600  w-[500px] overflow-y-scroll flex-grow">
                 {% block body %}
                 {% endblock %}
+                <!--Comment section-->
+
+                <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden z-10">
+                    <div id="commentbox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
+
+                        <div onclick="closeCommentBox()" class="relative mb-8 inset-2 text-white text-xl hover:cursor-pointer"><i class="fa-solid fa-xmark"></i></div>
+                        <div class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white">
+                            <div class="flex">
+                                <img id="reply_pic" class="w-14 h-12 rounded-full mr-2" src="" alt="user Avatar">
+                                
+                                <div class="w-full">
+                                    <div class="flex pt-1">
+                                        <div>
+                                            <span id="username" class="font-bold"></span>
+                                            <span id="timestamp" class="text-gray-500 text-[13px]"></span>
+                                            <span class="text-gray-500 text-[13px]">•</span>
+                                            <span class="text-gray-500 text-[13px]">Public</span>
+                                        </div>
+                                    </div>
+                                    <div id="content" class="text-md w-full pl-0 pt-0 p-2 bg-gray-800 "></div>
+                                    <div class=" text-gray-500 text-[14px] w-full pl-0 pt-0 p-2  ">Replying to <span></span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full min-h-[185px] mx-auto bg-gray-800 p-2 text-white ">
+                            <form id="reply_form" class="h-full" method="Post" action="" enctype="multipart/form-data">
+                                {%csrf_token%}
+
+                                <div class="flex">
+                                    {%if user.is_authenticated %}
+                                        <img class="w-14 h-12 rounded-full mr-2" src="{{user.picture.url}}" alt="Profile Avatar">
+                                    {%else%}
+                                        <img class="w-14 h-12 rounded-full mr-2" src="{% static 'network/Images/default.png' %}" alt="Profile Avatar">
+                                    {%endif%}
+                                    
+                                    <div class="w-full text-xl">
+                                        <textarea name="content" oninput="resize(this)"  class="text-xl h-28 w-full p-2 overflow-y-hidden bg-gray-800 resize-none focus:outline-offset-0 focus:ring-0  border-0 focus:border-b focus:border-gray-600" 
+                                            placeholder="Post your reply"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end mt-2 ml-14">
+                                    <button class="tweet w-[20%] px-1 py-2" type="submit"> <span>Reply</span></button>
+                                </div>
+                            </form>
+                        </div>  
+                    </div>
+                </div>         
+                <!--Comment section-->
             </div>
-            <div class="bg-gray-800 relative overflow-y-scroll" style="flex-grow: 1;">
-                <footer>
-                    <div id="news"></div>
-                </footer>                
+
+            <div class=" bg-gray-800 relative overflow-y-scroll p-3 flex-grow ">
+                
+                <div id="news" class="rounded-lg p-3 bg-gray-700 bg-opacity-50 w-fit hidden lg:block ">
+                    <div class="w-full backdrop-blur-md backdrop-filter mb-6 h-8  p-3 text-xl text-white font-bold "> Your news right here</div>
+                </div>
             </div>
         </div>
     </body>

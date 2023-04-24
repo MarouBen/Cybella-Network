@@ -253,7 +253,7 @@
     </div>
 
     <!-- edit overlay-->
-     <div id="overlay" class="edit_overlay fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden">
+     <div id="overlay" class="edit_overlay fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden z-10">
         <form method="POST" action="{%url 'edit_profile' username=TheUser.username %}" id="editBox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 " enctype="multipart/form-data">
             {%csrf_token%}
             <div class="relative inset-2 text-white text-xl  flex">
@@ -313,6 +313,22 @@
                 alert("Please select a valid image file.");
                 }
             }
+        }
+        function openCommentBox(u,t,c,url,id) {
+            var username = document.querySelector("#username");
+            var timestamp = document.querySelector("#timestamp");
+            var content = document.querySelector("#content");
+            var reply_pic = document.querySelector("#reply_pic");
+            var reply_form = document.querySelector("#reply_form");
+            var r_url = "{% url 'comment' post_id=0 %}".replace("0", id);
+            reply_form.action = r_url;
+            reply_pic.src = url;  
+            username.innerHTML = u;
+            timestamp.innerHTML = t + " ago";
+            content.innerHTML = c;
+        
+            var commentBox = document.getElementById("overlay");
+            commentBox.classList.remove("hidden");
         }
     </script>
 {% endblock %}
