@@ -11,7 +11,7 @@
         <link rel ="stylesheet" href="{% static 'network/css/styles.css' %}">
         <script src="https://kit.fontawesome.com/d61c00eed6.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="{% static 'network/js/news.js' %}"></script>
+        <script src="{% static 'network/js/news.js' %}" defer></script>
         {% block script %}
         {% endblock %}
     </head>
@@ -108,10 +108,8 @@
                 <!--Comment section-->
             </div>
 
-            <div class=" bg-gray-800 relative overflow-y-scroll p-3 flex-grow ">
-                
-                <div id="news" class="rounded-lg p-3 bg-gray-700 bg-opacity-50 w-fit hidden lg:block ">
-            
+            <div class=" bg-gray-800 relative w-fit overflow-y-scroll p-3 flex-grow">
+                <div id="news" class="rounded-lg p-3 bg-gray-700 bg-opacity-50  hidden lg:block ">
                 </div>
             </div>
         </div>
