@@ -10,6 +10,8 @@
         {% tailwind_css %}
         <link rel ="stylesheet" href="{% static 'network/css/styles.css' %}">
         <script src="https://kit.fontawesome.com/d61c00eed6.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{% static 'network/js/news.js' %}"></script>
         {% block script %}
         {% endblock %}
     </head>
@@ -51,16 +53,16 @@
         </nav>
         <!-- Sidebar -->
         <div class="body h-screen flex flex-row w-[69%] ml-[31%] ">
-            <div class="bg-gray-800 flex-grow relative border-x border-gray-600 max-w-2xl overflow-y-scroll">
+            <div class="bg-gray-800 min-w-[50%]  relative border-x border-gray-600 max-w-2xl overflow-y-scroll" style="flex-grow:2;">
                 
                 {% block body %}
                 {% endblock %}
             </div>
-            <div class="bg-gray-800 flex-grow">
-                {% block footer %}
-                {% endblock %}
+            <div class="bg-gray-800 relative overflow-y-scroll" style="flex-grow: 1;">
+                <footer>
+                    <div id="news"></div>
+                </footer>                
             </div>
         </div>
-        
     </body>
 </html>

@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse,reverse_lazy
+from newsapi import NewsApiClient
 
 from .models import User,Post
 
@@ -311,3 +312,14 @@ def following(request):
     return render(request, "network/following.html", {
         "posts" : posts
     })
+    
+# News API
+def news(request):
+    # your existing view code
+    newsapi = NewsApiClient(api_key='23057fa75f114ffaac8274b12da31e41')
+    top_headlines = newsapi.get_top_headlines(language='en', country='us')
+    articles = top_headlines['articles']
+    response_data = {
+        'articles': articles,
+    }
+    return JsonResponse(response_data)
