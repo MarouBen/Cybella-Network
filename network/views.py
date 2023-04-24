@@ -1,4 +1,5 @@
 import json
+from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
@@ -9,7 +10,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse,reverse_lazy
 
 from .models import User,Post
@@ -52,8 +53,34 @@ class ProfileView(View):
         except User.DoesNotExist:
             # Handle user not found error
             return JsonResponse({'Error': False, 'message': 'User Not Found.'})
-            
+    
+    
+@login_required    
+def edit_profile(request, username):
+        userObject = User.objects.get(username=username)
+        
+        if request.user != userObject:
+            raise PermissionDenied
+       
+        if request.method == "POST":
+            if request.FILES.get("I") is not None:
+                # delete old profile picture if it exists
+                if userObject.picture:
+                    default_storage.delete(userObject.picture.name)
+                    # save new profile picture
+                    userObject.picture = request.FILES["I"]
+                    
+            if request.POST.get("username") is not None:
+                userObject.username = request.POST.get("username")
+            if request.POST.get("email") is not None:
+                userObject.email = request.POST.get("email")
+            if request.POST.get("bio") is not None:
+                userObject.bio = request.POST.get("bio")
+            userObject.save()
+            return HttpResponseRedirect(reverse("profile", args=[userObject.username]))
 
+        
+    
 def login_view(request):
     if request.method == "POST":
 

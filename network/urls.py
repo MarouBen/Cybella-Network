@@ -18,5 +18,6 @@ urlpatterns = [
     path("post/<int:post_id>",views.view_post, name="post"),
     path("bookmark",views.view_bookmarks, name="bookmark"),
     path("profile/<str:username>",views.ProfileView.as_view(), name="profile"),
+    path('profile/<str:username>/edit/', views.edit_profile, name='edit_profile'),
     path("following",views.following, name="following"),
 ]

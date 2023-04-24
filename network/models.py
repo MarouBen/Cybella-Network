@@ -4,9 +4,10 @@ from django.db import models
 
 class User(AbstractUser):
     """ User model. also contain the profile picture. and it's followers and following. """
-    picture = models.ImageField(upload_to="network/images/profile_pictures", blank=True, null=True,default="network/images/profile_pictures/default.png")
+    picture = models.ImageField(upload_to="network/images/profile_pictures", blank=True, null=True, default="network/images/profile_pictures/default.png")
     followers = models.ManyToManyField("self", symmetrical=False, blank=True, related_name="following")
     bookmarks = models.ManyToManyField("Post", blank=True, related_name="bookmarked_by")
+    bio = models.TextField(blank=True)
     
     def follow(self, user):
         """ Follow the given user """
