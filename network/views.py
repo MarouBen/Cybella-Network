@@ -249,7 +249,7 @@ def repost(request, post_id):
         Post.objects.filter(user=user, repost=original_post).delete()
         return JsonResponse({"message": "Post unposted successfully."}, status=201)
     else:
-        repost = Post(user=user, content=f"Reposted from {user.username}: {original_post.content}", images=original_post.images, repost=original_post)
+        repost = Post(user=user, content=f"Reposted from {original_post.user.username}: {original_post.content}", images=original_post.images, repost=original_post)
         repost.save()
         return JsonResponse({"message": "Post reposted successfully."}, status=201)
     
