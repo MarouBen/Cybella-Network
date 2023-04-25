@@ -162,6 +162,7 @@ function editing(post_id){
 
 //function to bookmatk the post
 function bookmark(element,post_id){
+    console.log(post_id);
     fetch(`/bookmark/${post_id}`)
     .then (response =>{
         if (response.ok){
