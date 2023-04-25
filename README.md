@@ -1,5 +1,5 @@
 # Cybella Network
-#### Video Demo:  <[URL HERE](...)>
+#### Video Demo:  <[URL HERE](https://youtu.be/RZ-W57EwGTg)>
 This is a web application built using Django, JavaScript, and Tailwind CSS. The application is a social media platform similar to Twitter, allowing users to post messages, repost messages, like and comment on messages, and view a sidebar with current news from the NewsAPI.
 
 ## Features
