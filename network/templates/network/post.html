@@ -59,9 +59,9 @@
         {%endif%}
 
         {% if post not in user.bookmarks.all %}
-            <div onclick="bookmark({{post.id}});adjustBookmark(this);" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-bookmark text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.bookmarked_by.count}}</span></div>
+            <div onclick="bookmark(this,{{post.id}});adjustBookmark(this);" class="flex hover:text-blue-400 hover:cursor-pointer"><i class="fa-regular fa-bookmark text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2"></i><span class="mt-1.5 ml-1">{{post.bookmarked_by.count}}</span></div>
         {%else%}
-            <div onclick="bookmark({{post.id}});adjustBookmark(this);" class="flex text-blue-400 hover:text-blue-400 hover:cursor-pointer"><i class="fa-solid fa-bookmark text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.bookmarked_by.count}}</span></div>
+            <div onclick="bookmark(this,{{post.id}});adjustBookmark(this);" class="flex text-blue-400 hover:text-blue-400 hover:cursor-pointer"><i class="fa-solid fa-bookmark text-xl rounded-full hover:bg-blue-400 hover:bg-opacity-20 p-2 "></i><span class="mt-1.5 ml-1">{{post.bookmarked_by.count}}</span></div>
         {%endif%}
     </div>
 </div>
