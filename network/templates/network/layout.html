@@ -10,14 +10,15 @@
         {% tailwind_css %}
         <link rel ="stylesheet" href="{% static 'network/css/styles.css' %}">
         <script src="https://kit.fontawesome.com/d61c00eed6.js" crossorigin="anonymous"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="{% static 'network/js/news.js' %}" defer></script>
         {% block script %}
         {% endblock %}
     </head>
-    <body class="overflow-hidden w-screen h-screen flex flex-row">
+    <body class="overflow-hidden flex flex-row ">
         <!-- Sidebar -->
-        <nav class=" container  max-w-[31%] flex flex-col p-2  flex-grow bg-gray-800 h-screen items-end fixed">
+        <nav class="hidden md:flex container  max-w-[31%]  flex-col p-2  flex-grow bg-gray-800 h-screen items-end fixed">
 
             <div class="sidebar flex flex-col text-xl font-normal text-white w-[275px] h-full justify-between">
 
@@ -51,15 +52,23 @@
 
             </div>
         </nav>
+        <div id="mobile-nav" class="fixed md:hidden bottom-0 flex flex-row z-50 text-white bg-gray-800 w-full justify-around border border-gray-600 h-14" >
+            <a class="flex p-3 text-center sidebar-link my-2" href="{%url "index"%}"><i class="fa-solid fa-house-user text-2xl"></i></a>
+            <a class="flex p-3 text-center sidebar-link my-2" href="{%url "following"%}"><i class="fa-solid fa-tag text-2xl "></i></a>
+            <a class="flex p-3 text-center sidebar-link my-2" href="{%url "bookmark"%}"><i class="fa-regular fa-bookmark text-2xl"></i></a>
+            {% if user.is_authenticated%}
+                <a class="flex p-3 text-center sidebar-link my-2" href="{% url 'profile' username=user.username %}"><i class="fa-regular fa-user text-2xl"></i></a>
+            {% endif %}
+        </div>
         <!-- Sidebar -->
-        <div class="body h-screen flex flex-row w-[69%] ml-[31%] ">
+        <div class="body h-screen flex flex-row md:w-[69%] md:ml-[31%] w-full pb-14 md:pb-0 ">
             <div class="bg-gray-800  relative border-x border-gray-600  w-[500px] overflow-y-scroll flex-grow">
                 {% block body %}
                 {% endblock %}
                 <!--Comment section-->
 
                 <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden z-10">
-                    <div id="commentbox" class="w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
+                    <div id="commentbox" class="w-[90%] md:w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
 
                         <div onclick="closeCommentBox()" class="relative mb-8 inset-2 text-white text-xl hover:cursor-pointer"><i class="fa-solid fa-xmark"></i></div>
                         <div class="w-full mx-auto bg-gray-800 pb-1 p-2 text-white">
@@ -108,7 +117,7 @@
                 <!--Comment section-->
             </div>
 
-            <div class=" bg-gray-800 relative overflow-y-scroll p-3 flex-grow">
+            <div class=" bg-gray-800 relative overflow-y-scroll p-3 flex-grow hidden md:flex">
                 <div id="news" class="rounded-lg w-fit p-3 bg-gray-700 bg-opacity-50 hidden lg:block ">
                     <a href="#" class="hidden flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                         <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="{{user.picture.url}}" alt="">
