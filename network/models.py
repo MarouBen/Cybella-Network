@@ -1,10 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from storages.backends.s3boto3 import S3Boto3Storage
 
 class User(AbstractUser):
     """ User model. also contain the profile picture. and it's followers and following. """
-    picture = models.ImageField(upload_to="network/images/profile_pictures", blank=True, null=True, default="network/images/profile_pictures/default.png")
+    picture = models.ImageField(upload_to="media_CM/images/profile_pictures",storage=S3Boto3Storage(), blank=True, null=True, default="media_CM/images/profile_pictures/default.png")
     followers = models.ManyToManyField("self", symmetrical=False, blank=True, related_name="following")
     bookmarks = models.ManyToManyField("Post", blank=True, related_name="bookmarked_by")
     bio = models.TextField(blank=True)
@@ -48,7 +48,7 @@ class Post(models.Model):
     content = models.CharField(max_length=500)
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, blank=True, related_name="liked_posts")
-    images = models.ImageField(upload_to="network/images/posts", blank=True, null=True)
+    images = models.ImageField(upload_to="media_CM/images/posts",storage=S3Boto3Storage(), blank=True, null=True)
     repost = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name="reposts")
     parent_post = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True, related_name="comments")
 

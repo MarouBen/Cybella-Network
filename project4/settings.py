@@ -1,5 +1,6 @@
 import os
 import django_heroku
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -9,7 +10,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '13kl@xtukpwe&xj2xoysxe9_6=tf@f8ewxer5n&ifnd46+6$%8'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tailwind',
     'theme',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +126,26 @@ INTERNAL_IPS = [
 
 # deployment settings
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# AWS S3
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+
+AWS_STORAGE_BUCKET_NAME = "maroufolio"
+AWS_S3_REGION_NAME = "eu-central-1"
+
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = 'https://s3.{0}.amazonaws.com/{1}/'.format(AWS_S3_REGION_NAME, AWS_STORAGE_BUCKET_NAME)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_CM')
+
+#dotenv
+load_dotenv()
 
 # Heroku
 django_heroku.settings(locals())
