@@ -1,0 +1,44 @@
+
+*{
+    font-family:"TwitterChirp",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+
+.sidebar-link:hover{
+    width: fit-content;
+    background-color: rgba(247,249,249,0.1);
+    border-radius: 9999px;
+}
+.logout:hover{
+    background-color: rgba(247,249,249,0.1);
+    border-radius: 9999px;
+}
+
+.tweet {
+    background-color: #2ea5e0;
+    border-radius: 9999px;
+    transition: all ease-in-out 0.2s;
+
+}
+   
+.tweet span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+}
+   
+.tweet:hover {
+    background-color: #0071e2;
+}
+
+::-webkit-scrollbar {
+    display: none;
+  }
+
+#pr:hover{
+    background-color: #2D3748;
+    
+}
+
