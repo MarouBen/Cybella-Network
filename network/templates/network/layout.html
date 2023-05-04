@@ -52,7 +52,7 @@
 
             </div>
         </nav>
-        <div id="mobile-nav" class="fixed md:hidden bottom-0 flex flex-row z-50 text-white bg-gray-800 w-full justify-around border border-gray-600 h-14" >
+        <div id="mobile-nav" class="fixed md:hidden bottom-0 flex flex-row z-40 text-white bg-gray-800 w-full justify-around border border-gray-600 h-14" >
             <a class="flex p-3 text-center sidebar-link my-2" href="{%url "index"%}"><i class="fa-solid fa-house-user text-2xl"></i></a>
             <a class="flex p-3 text-center sidebar-link my-2" href="{%url "following"%}"><i class="fa-solid fa-tag text-2xl "></i></a>
             <a class="flex p-3 text-center sidebar-link my-2" href="{%url "bookmark"%}"><i class="fa-regular fa-bookmark text-2xl"></i></a>
@@ -67,7 +67,7 @@
                 {% endblock %}
                 <!--Comment section-->
 
-                <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden z-10">
+                <div id="overlay" class="fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden z-50">
                     <div id="commentbox" class="w-[90%] md:w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto mt-20 p-2 ">
 
                         <div onclick="closeCommentBox()" class="relative mb-8 inset-2 text-white text-xl hover:cursor-pointer"><i class="fa-solid fa-xmark"></i></div>

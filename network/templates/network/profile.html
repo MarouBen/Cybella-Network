@@ -253,8 +253,8 @@
     </div>
 
     <!-- edit overlay-->
-     <div id="overlay" class="edit_overlay fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden z-10">
-        <form method="POST" action="{%url 'edit_profile' username=TheUser.username %}" id="editBox" class="w-[90%] md:w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto md:mt-20 p-2 " enctype="multipart/form-data">
+     <div id="overlay" class="edit_overlay fixed inset-0 w-screen h-screen bg-gray-500 bg-opacity-30 hidden z-50">
+        <form method="POST" action="{%url 'edit_profile' username=TheUser.username %}" id="editBox" class="w-[90%] md:w-[600px] min-h-[366px] bg-gray-800 rounded-2xl m-auto overflow-auto md:mt-20 p-2 " enctype="multipart/form-data">
             {%csrf_token%}
             <div class="relative inset-2 text-white text-xl  flex">
                 <i onclick="closeCommentBox()"  class="fa-solid fa-xmark hover:cursor-pointer"></i>
