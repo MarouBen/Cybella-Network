@@ -54,11 +54,16 @@
             </div>
         </nav>
         <div id="mobile-nav" class="fixed md:hidden bottom-0 flex flex-row z-40 text-white bg-gray-800 w-full justify-around border border-gray-600 h-14" >
-            <a class="flex p-3 text-center sidebar-link my-2" href="{%url "index"%}"><i class="fa-solid fa-house-user text-2xl"></i></a>    
+            <a class="flex p-3 text-center sidebar-link my-auto" href="{%url "index"%}"><i class="fa-solid fa-house-user text-2xl"></i></a>    
             {% if user.is_authenticated%}
-                <a class="flex p-3 text-center sidebar-link my-2" href="{%url "following"%}"><i class="fa-solid fa-tag text-2xl "></i></a>
-                <a class="flex p-3 text-center sidebar-link my-2" href="{%url "bookmark"%}"><i class="fa-regular fa-bookmark text-2xl"></i></a>
-                <a class="flex p-3 text-center sidebar-link my-2" href="{% url 'profile' username=user.username %}"><i class="fa-regular fa-user text-2xl"></i></a>
+                <a class="flex p-3 text-center sidebar-link my-auto " href="{%url "following"%}"><i class="fa-solid fa-tag text-2xl "></i></a>
+                <a class="flex p-3 text-center sidebar-link my-auto" href="{%url "bookmark"%}"><i class="fa-regular fa-bookmark text-2xl"></i></a>
+                <a class="flex p-3 text-center sidebar-link my-auto" href="{% url 'profile' username=user.username %}"><i class="fa-regular fa-user text-2xl"></i></a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a class="p-2 text-center logout flex justify-between h-fit my-auto" href="{% url 'logout' %}"><div class="h-fit"><i class="fa-solid fa-right-from-bracket text-xl"></i></div></a>
+            {% else %}
+                <a class="p-2 text-center logout flex justify-between h-fit my-auto" href="{% url 'login' %}"><div class="h-fit pt-1"><i class="fa-solid fa-right-to-bracket text-2xl"></i></div></a>
             {% endif %}
         </div>
         <!-- Sidebar -->
