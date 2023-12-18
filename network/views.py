@@ -116,12 +116,7 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return JsonResponse(
-                    {
-                        'Error': False, 
-                        'message': 'Passwords must match.'
-                    }
-                )
+            return JsonResponse({'Error': False, 'message': 'Passwords must match.'})
 
         # Attempt to create new user
         try:
