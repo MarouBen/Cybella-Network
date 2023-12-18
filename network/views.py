@@ -101,7 +101,7 @@ def login_view(request):
     else:
         return render(request, "network/login.html")
 
-
+@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -116,13 +116,19 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return JsonResponse({'Error': False, 'message': 'Passwords must match.'})
+            return JsonResponse(
+                    {
+                        'Error': False, 
+                        'message': 'Passwords must match.'
+                    }
+                )
 
         # Attempt to create new user
         try:
             # Check if email already exists
             if User.objects.filter(email=email).exists():
                 return JsonResponse({'Error': False, 'message': 'Email address already taken.'})
+            
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError as e:
@@ -202,7 +208,7 @@ def edit_post(request, post_id):
         return HttpResponseRedirect(reverse("index"))
         
     
-
+@login_required
 def like (request, post_id):
     # Check if user is authenticated
     if not request.user.is_authenticated:
@@ -237,6 +243,7 @@ def comment(request, post_id):
         
 
 # function to repost a post
+@login_required
 def repost(request, post_id):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "You must be logged in to like a post."}, status=403)
@@ -254,6 +261,7 @@ def repost(request, post_id):
         return JsonResponse({"message": "Post reposted successfully."}, status=201)
     
 # function to delete a post
+@login_required
 def delete(request, post_id):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "You must be logged."}, status=403)
@@ -268,6 +276,7 @@ def delete(request, post_id):
         return JsonResponse({"error": "You are not authorized to delete this post."}, status=402)
     
 # function to bookmark a post
+@login_required
 def bookmark(request, post_id):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "You must be logged in to like a post."}, status=403)
@@ -316,7 +325,7 @@ def following(request):
 # News API
 def news(request):
     # your existing view code
-    newsapi = NewsApiClient(api_key='23057fa75f114ffaac8274b12da31e41')
+    newsapi = NewsApiClient(api_key='e4a94eae291e475db66587b205ae747b')
     top_headlines = newsapi.get_top_headlines(language='en', country='us')
     articles = top_headlines['articles']
     response_data = {

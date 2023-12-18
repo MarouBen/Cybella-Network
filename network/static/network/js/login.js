@@ -59,7 +59,7 @@ function register(){
 }
 
 // function to show alert
-function showAlert(data,alert){
+function showAlert(data, alert){
     if (data.success){
         window.location.href = data.redirect;
     }
