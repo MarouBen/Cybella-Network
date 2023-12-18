@@ -97,7 +97,7 @@ def login_view(request):
             login(request, user)
             return JsonResponse({'success': True, 'redirect': reverse("index")})
         else:
-            return JsonResponse({'Error': False, 'message': 'Invalid email and/or password.'})
+            return JsonResponse({'Error': False, 'message': 'Invalid Username and/or password.'})
     else:
         return render(request, "network/login.html")
 
